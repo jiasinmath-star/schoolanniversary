@@ -22,24 +22,72 @@
   let flightMapUpdateAt = 0;
   let activeJoystick = null;
   const schoolCoordinate = [121.5145853, 24.9696795];
-  const pigBellyMountainCoordinate = [121.51235, 24.97035];
+  const sunshineParkCoordinate = [121.51994, 24.97692];
+  const xizhouParkCoordinate = [121.532693, 24.964708];
+  const taipingTempleCoordinate = [121.533087, 24.958744];
+  const hemeiMountainCoordinate = [121.5348159, 24.9562198];
+  const zhitanPlantCoordinate = [121.5275, 24.9427];
+  const wenshanFarmCoordinate = [121.54323, 24.93014];
   const bitanCoordinate = [121.53699, 24.956896];
   const realFlightRoute = [
     schoolCoordinate,
-    pigBellyMountainCoordinate,
-    [121.51994, 24.97692],
-    [121.5254, 24.9728],
-    [121.533087, 24.958744],
-    [121.5352, 24.9576],
+    sunshineParkCoordinate,
+    xizhouParkCoordinate,
+    taipingTempleCoordinate,
+    hemeiMountainCoordinate,
+    zhitanPlantCoordinate,
+    wenshanFarmCoordinate,
     bitanCoordinate
   ];
   const scenicLandmarks = [
-    { p: .015, type: "school", label: "安康高中", short: "安康高中", lane: -.28, coord: schoolCoordinate },
-    { p: .17, type: "mountain", label: "校後方豬肚山", short: "豬肚山", lane: -.2, coord: pigBellyMountainCoordinate },
-    { p: .34, type: "park", label: "陽光運動公園", short: "陽光公園", lane: .24, coord: [121.51994, 24.97692] },
-    { p: .51, type: "highway", label: "高速公路", short: "高速公路", lane: -.12, coord: [121.5254, 24.9728] },
-    { p: .68, type: "temple", label: "太平宮", short: "太平宮", lane: .25, coord: [121.533087, 24.958744] },
-    { p: .985, type: "bitan", label: "碧潭吊橋", short: "碧潭", lane: 0, coord: bitanCoordinate }
+    {
+      p: .015, type: "school", label: "安康高中", short: "安康高中", lane: -.28, coord: schoolCoordinate,
+      photo: "./assets/landmarks/ankang-high-school-campus.jpg", photoAlt: "安康高中校舍、操場與校園全景",
+      photoKind: "校園實拍", credit: "全國運動場館資訊網 iPlay", sourceUrl: "https://iplay.sports.gov.tw/gyminfo/index/7877",
+      intro: "從校園上空完成起飛檢查；鏡頭可看見校舍、操場與環山校景，接著展開新店實景航程。"
+    },
+    {
+      p: .145, type: "park", label: "陽光運動園區", short: "陽光公園", lane: .24, coord: sunshineParkCoordinate,
+      photo: "./assets/landmarks/sunshine-sports-park.jpg", photoAlt: "陽光運動園區草地、足球活動與陽光橋",
+      photoKind: "景點實拍", credit: "新北市政府觀光旅遊局", sourceUrl: "https://newtaipei.travel/zh-tw/attractions/detail/112381",
+      intro: "新店溪畔的大型運動園區，從空中可辨認草地、跑道與造型鮮明的陽光橋。"
+    },
+    {
+      p: .285, type: "xizhou", label: "溪洲公園", short: "溪洲公園", lane: -.18, coord: xizhouParkCoordinate,
+      photo: "./assets/landmarks/xizhou-park.jpg", photoAlt: "新店溪左岸溪洲公園的河岸綠地",
+      photoKind: "景點實拍", credit: "新北市政府", sourceUrl: "https://www.hrcm.ntpc.gov.tw/Zone/Assets/%E6%96%B0%E5%BA%97%E6%BA%AA%E5%B7%A6%E5%B2%B8/%E6%BA%AA%E6%B4%B2%E5%85%AC%E5%9C%92",
+      intro: "溪洲公園位於陽光橋與碧潭之間，沿新店溪左岸串起河濱綠地、自行車道與水岸生態。"
+    },
+    {
+      p: .425, type: "temple", label: "太平宮", short: "太平宮", lane: .25, coord: taipingTempleCoordinate,
+      photo: "./assets/landmarks/taiping-temple-remote.jpg", photoAlt: "新店太平宮正面外觀",
+      photoKind: "景點實拍", credit: "新北市客家文化典藏資料庫", sourceUrl: "https://www.hakka-portal.ntpc.gov.tw/article/%E6%96%B0%E5%BA%97%E5%A4%AA%E5%B9%B3%E5%AE%AE0311490144657502",
+      intro: "太平宮位於安坑外五張大坪頂，主祀開漳聖王，是航線上色彩鮮明的地方信仰地標。"
+    },
+    {
+      p: .565, type: "hemei", label: "和美山步道", short: "和美山", lane: .16, coord: hemeiMountainCoordinate,
+      photo: "./assets/landmarks/hemeishan-fireflies.jpg", photoAlt: "和美山步道夜間螢火蟲點亮林間石階",
+      photoKind: "螢火蟲實拍", credit: "新北市政府觀光旅遊局", sourceUrl: "https://newtaipei.travel/zh-tw/news/detail/3797",
+      intro: "和美山緊鄰碧潭，春季夜晚可見螢火蟲點亮林間；賞螢時應避免強光並保持安靜。"
+    },
+    {
+      p: .705, type: "waterworks", label: "直潭淨水場", short: "直潭淨水場", lane: -.14, coord: zhitanPlantCoordinate,
+      photo: "./assets/landmarks/zhitan-water-treatment-plant.webp", photoAlt: "直潭淨水場入口與中英文場名",
+      photoKind: "外觀實拍", credit: "OPEN HOUSE TAIPEI", sourceUrl: "https://www.opentaipei.org/house/2023ChihtanWaterPurificationPlant",
+      intro: "直潭淨水場取用新店溪原水，是大臺北重要的供水設施；本關僅作虛擬辨識，不提供真實飛航指引。"
+    },
+    {
+      p: .845, type: "wenshan", label: "文山農場", short: "文山農場", lane: .2, coord: wenshanFarmCoordinate,
+      photo: "./assets/landmarks/wenshan-farm.jpg", photoAlt: "文山農場的茶園與山林景觀",
+      photoKind: "景點實拍", credit: "新北市政府觀光旅遊局", sourceUrl: "https://newtaipei.travel/zh-tw/attractions/detail/109976",
+      intro: "文山農場以茶園、生態與環境教育聞名；完成這個倒數第二站後，航線折返前往碧潭終點。"
+    },
+    {
+      p: .985, type: "bitan", label: "碧潭吊橋", short: "碧潭", lane: 0, coord: bitanCoordinate,
+      photo: "./assets/landmarks/bitan-suspension-bridge.jpg", photoAlt: "夜間點燈的碧潭吊橋與新店溪",
+      photoKind: "景點實拍", credit: "新北市政府觀光旅遊局", sourceUrl: "https://newtaipei.travel/zh-tw/attractions/detail/110096",
+      intro: "看見新店溪與碧潭吊橋，就代表這趟安康高中到碧潭的 FPV 航程抵達終點。"
+    }
   ];
   const flightObstacles = [
     { p: .30, type: "wires", label: "高壓電線", lane: 0 },
@@ -229,7 +277,7 @@
       <div class="experience-body">
         <p class="kicker">REAL AERIAL FPV · XINDIAN</p>
         <h1>打開真實空拍影像，從安康高中飛到碧潭</h1>
-        <p class="prompt">主畫面優先使用 Google 衛星地圖模擬無人機攝影機；降低高度會放大地面細節，升高則縮小並看見更大範圍。右側小地圖提示航向，下方雙搖桿模擬遙控器。</p>
+        <p class="prompt">主畫面優先使用 Google 衛星地圖模擬無人機攝影機；降低高度會放大地面細節，升高則縮小並看見更大範圍。右側小地圖顯示重新規劃的完整航線，抵達八個特色地標時會顯示代表照片。</p>
         <div class="map-source-status ${String(window.AK_GOOGLE_MAPS_KEY || "").trim() ? "ready" : "pending"}"><b>${String(window.AK_GOOGLE_MAPS_KEY || "").trim() ? "GOOGLE SATELLITE READY" : "GOOGLE MAPS KEY 待設定"}</b><span>${String(window.AK_GOOGLE_MAPS_KEY || "").trim() ? "遊戲將載入 Google 衛星影像與 Google 導航地圖。" : "尚未填入金鑰時，會先使用國土測繪中心正射影像，避免現場出現空白地圖。"}</span></div>
         <div class="fpv-preview-card">
           <div class="preview-camera"><span class="preview-rec">● REC</span><i>⌖</i><b>安康高中</b><em>→ 碧潭</em></div>
@@ -250,11 +298,11 @@
   function launchTaiwanFlight() {
     stopFlightLoop();
     state.flight = {
-      progress: 0, altitude: 18, lateral: 0, heading: 121, speed: 0,
+      progress: 0, altitude: 18, lateral: 0, heading: routeBearing(0), speed: 0,
       controls: { throttle: 0, yaw: 0, pitch: 0, roll: 0 },
       battery: 100, collisions: 0, autopilotUsed: 0, auto: false,
       startedAt: performance.now(), finished: false, hitObstacles: new Set(),
-      lastWarning: "", visited: new Set(["school"])
+      lastWarning: "", visited: new Set(), shownLandmarks: new Set(), activeLandmark: "", landmarkCardUntil: 0, arrivalAt: 0
     };
     renderTaiwanFlight();
     window.setTimeout(initFlightMaps, 0);
@@ -278,11 +326,15 @@
             <div class="fpv-real-map" id="fpv-real-map" aria-hidden="true"></div>
             <canvas id="fpv-canvas"></canvas>
             <div class="camera-scanlines"></div>
-            <div class="camera-top"><span class="rec-dot">● REC</span><span id="camera-heading">NE 121°</span><span>FPV 1080P</span></div>
+            <div class="camera-top"><span class="rec-dot">● REC</span><span id="camera-heading">${headingName(routeBearing(0))} ${Math.round(routeBearing(0))}°</span><span>FPV 1080P</span></div>
             <div class="camera-crosshair" aria-hidden="true"><i></i><b></b></div>
             <div class="altitude-tape"><small>ALT</small><strong id="camera-altitude">18</strong><span>m</span></div>
             <div class="scene-label" id="scene-label">真實空拍｜安康高中</div>
             <div class="obstacle-alert" id="obstacle-alert" hidden>⚠ AI 偵測障礙物</div>
+            <article class="landmark-arrival-card" id="landmark-arrival-card" aria-live="polite" aria-hidden="true">
+              <div class="landmark-photo-frame"><img id="landmark-card-photo" src="" alt=""><span id="landmark-card-kind">景點實拍</span></div>
+              <div class="landmark-card-copy"><small>LANDMARK REACHED</small><h2 id="landmark-card-title">抵達景點</h2><p id="landmark-card-intro"></p><a id="landmark-card-credit" href="#" target="_blank" rel="noreferrer"></a></div>
+            </article>
             <a class="imagery-credit" id="imagery-credit" href="https://maps.nlsc.gov.tw/" target="_blank" rel="noreferrer">正射影像 © 內政部國土測繪中心</a>
             <div class="flight-message" id="flight-message">向上推右搖桿開始前進；左搖桿可先提高飛行高度。</div>
           </div>
@@ -298,7 +350,7 @@
           <div class="remote-screen"><small>FLIGHT MODE</small><strong id="remote-mode">MANUAL</strong><span id="remote-status">HOVER</span><button class="autopilot-btn" type="button" data-autopilot>AI 導航協助</button></div>
           <div class="stick-block"><strong>右搖桿</strong><small>前進／橫移</small><div class="joystick" data-joystick="right" aria-label="右搖桿：前進與橫向移動"><i class="axis-v">前<br>後</i><i class="axis-h">左　右</i><b class="stick-knob"></b></div></div>
         </div>
-        <p class="flight-tip">鏡頭內紅框就是 AI 辨識到的障礙物。抵達碧潭後會自動完成課程。</p>
+        <p class="flight-tip">鏡頭內紅框就是 AI 辨識到的障礙物；抵達特色地標時會跳出代表照片，抵達碧潭後自動完成課程。</p>
       </div>
     </section>`;
   }
@@ -334,6 +386,12 @@
     const a = realFlightRoute[index];
     const b = realFlightRoute[index + 1];
     return [a[0] + (b[0] - a[0]) * local, a[1] + (b[1] - a[1]) * local + lateral * .00035];
+  }
+
+  function flightRouteBounds() {
+    const longitudes = realFlightRoute.map(coordinate => coordinate[0]);
+    const latitudes = realFlightRoute.map(coordinate => coordinate[1]);
+    return [[Math.min(...longitudes), Math.min(...latitudes)], [Math.max(...longitudes), Math.max(...latitudes)]];
   }
 
   function makeMapMarker(label, kind) {
@@ -553,6 +611,7 @@
         new window.maplibregl.Marker({ element: makeMapMarker("碧潭", "bitan"), anchor: "bottom" }).setLngLat(bitanCoordinate).addTo(flightMap);
         flightDroneMarker = new window.maplibregl.Marker({ element: makeMapMarker("航機", "current"), anchor: "center" }).setLngLat(schoolCoordinate).addTo(flightMap);
         panel.classList.add("map-ready");
+        flightMap.fitBounds(flightRouteBounds(), { padding: 18, duration: 0 });
         updateRealFlightMap(true);
       });
     } catch { flightMap = null; }
@@ -563,7 +622,7 @@
     if (!f || !flightCameraMap || !flightCameraMap.isStyleLoaded()) return;
     const center = routeCoordinate(f.progress, f.lateral);
     const heightRatio = Math.max(0, Math.min(1, (f.altitude - 6) / 52));
-    const yawOffset = ((f.heading - 121 + 540) % 360 - 180) * .38;
+    const yawOffset = ((f.heading - routeBearing(f.progress) + 540) % 360 - 180) * .38;
     flightCameraMap.jumpTo({
       center,
       zoom: 19 - heightRatio * 2.2,
@@ -573,20 +632,24 @@
     if (force) flightCameraMap.resize();
   }
 
-  function updateGoogleFlightMaps() {
+  function updateGoogleFlightMaps(force = false) {
     const f = state.flight;
     if (!f || !googleMapsMode || !googleCameraMap || !googleMiniMap) return;
     const coordinate = routeCoordinate(f.progress, f.lateral);
     const center = googlePosition(coordinate);
     const heightRatio = Math.max(0, Math.min(1, (f.altitude - 6) / 52));
-    const yawOffset = ((f.heading - 121 + 540) % 360 - 180) * .38;
+    const yawOffset = ((f.heading - routeBearing(f.progress) + 540) % 360 - 180) * .38;
     googleCameraMap.moveCamera({
       center,
       zoom: 19.4 - heightRatio * 2.7,
       heading: routeBearing(f.progress) + yawOffset,
       tilt: 0
     });
-    googleMiniMap.moveCamera({ center, zoom: 14.5 });
+    if (force) {
+      const bounds = new window.google.maps.LatLngBounds();
+      realFlightRoute.forEach(item => bounds.extend(googlePosition(item)));
+      googleMiniMap.fitBounds(bounds, 18);
+    }
     googleDroneMarker?.setPosition(center);
   }
 
@@ -603,8 +666,10 @@
     }
     if (flightMap && flightMap.isStyleLoaded()) {
       flightDroneMarker?.setLngLat(center);
-      flightMap.jumpTo({ center, zoom: 14.25, bearing: 0, pitch: 0 });
-      if (force) flightMap.resize();
+      if (force) {
+        flightMap.resize();
+        flightMap.fitBounds(flightRouteBounds(), { padding: 18, duration: 0 });
+      }
     }
     updateFpvRealMap(force);
   }
@@ -624,6 +689,36 @@
     return f.altitude > 20 && f.altitude < 40 && Math.abs(f.lateral - obstacle.lane) < .52;
   }
 
+  function showLandmarkCard(item, now = performance.now()) {
+    const f = state.flight;
+    const card = document.querySelector("#landmark-arrival-card");
+    if (!f || !card) return;
+    const photo = document.querySelector("#landmark-card-photo");
+    const kind = document.querySelector("#landmark-card-kind");
+    const title = document.querySelector("#landmark-card-title");
+    const intro = document.querySelector("#landmark-card-intro");
+    const credit = document.querySelector("#landmark-card-credit");
+    if (photo) { photo.src = item.photo; photo.alt = item.photoAlt; }
+    if (kind) kind.textContent = item.photoKind;
+    if (title) title.textContent = item.label;
+    if (intro) intro.textContent = item.intro;
+    if (credit) { credit.textContent = `照片來源：${item.credit}`; credit.href = item.sourceUrl; }
+    f.activeLandmark = item.type;
+    f.landmarkCardUntil = now + (item.type === "bitan" ? 3600 : 4200);
+    card.setAttribute("aria-hidden", "false");
+    card.classList.remove("show");
+    requestAnimationFrame(() => card.classList.add("show"));
+    document.querySelector("#scene-label")?.classList.add("is-card-open");
+  }
+
+  function hideLandmarkCard() {
+    const f = state.flight;
+    const card = document.querySelector("#landmark-arrival-card");
+    if (card) { card.classList.remove("show"); card.setAttribute("aria-hidden", "true"); }
+    document.querySelector("#scene-label")?.classList.remove("is-card-open");
+    if (f) f.activeLandmark = "";
+  }
+
   function taiwanFlightTick(now) {
     const f = state.flight;
     if (!f || f.finished) return stopFlightLoop();
@@ -634,6 +729,9 @@
       const targetAltitude = f.progress > .53 && f.progress < .70 ? 47 : 34;
       f.altitude += (targetAltitude - f.altitude) * Math.min(1, dt * 1.4);
       f.lateral += (0 - f.lateral) * Math.min(1, dt * 1.8);
+      const desiredHeading = routeBearing(f.progress);
+      const headingDelta = ((desiredHeading - f.heading + 540) % 360) - 180;
+      f.heading = (f.heading + headingDelta * Math.min(1, dt * 2.2) + 360) % 360;
       f.speed = .027;
     } else {
       f.altitude = Math.max(6, Math.min(58, f.altitude + f.controls.throttle * 13 * dt));
@@ -666,8 +764,31 @@
       updateFlightMessage(`⚠ 鏡頭偵測到${warning.label}：請調整${warning.type === "wires" ? "高度" : "高度或橫向位置"}。`);
     } else if (!warning) f.lastWarning = "";
 
-    scenicLandmarks.forEach(item => { if (f.progress >= item.p) f.visited.add(item.type); });
-    if (f.progress >= .985) return finishTaiwanFlight(true);
+    for (const item of scenicLandmarks) {
+      if (f.progress >= item.p) {
+        f.visited.add(item.type);
+        if (!f.shownLandmarks.has(item.type)) {
+          f.shownLandmarks.add(item.type);
+          showLandmarkCard(item, now);
+          if (item.type === "bitan") {
+            f.arrivalAt = now;
+            f.progress = .985;
+            f.speed = 0;
+            f.auto = false;
+            updateFlightMessage("✓ 已抵達碧潭：欣賞終點代表照片，課程即將完成。");
+          } else {
+            updateFlightMessage(`✓ 抵達${item.label}：鏡頭已辨識景點，請沿小地圖繼續前進。`);
+          }
+        }
+      }
+    }
+    if (f.activeLandmark && now >= f.landmarkCardUntil) hideLandmarkCard();
+    if (f.arrivalAt) {
+      updateTaiwanFlightDom(null);
+      if (now - f.arrivalAt >= 3300) return finishTaiwanFlight(true);
+      flightFrame = requestAnimationFrame(taiwanFlightTick);
+      return;
+    }
     if (f.battery <= 0) return finishTaiwanFlight(false);
     updateTaiwanFlightDom(warning);
     flightFrame = requestAnimationFrame(taiwanFlightTick);
@@ -696,12 +817,16 @@
       ctx.fillStyle = "#3c80b6"; for (let i=-32;i<=32;i+=22) ctx.fillRect(i,-29,12,15); ctx.fillStyle="#123f73"; ctx.fillRect(-17,-18,34,18); ctx.fillStyle="#fff"; ctx.font="900 11px sans-serif"; ctx.textAlign="center"; ctx.fillText("AKHS",0,-6);
     } else if (item.type === "park") {
       ctx.fillStyle="#58b86f"; ctx.beginPath(); ctx.ellipse(0,-8,62,31,0,0,Math.PI*2); ctx.fill(); ctx.strokeStyle="#f5a347"; ctx.lineWidth=7; ctx.beginPath(); ctx.ellipse(0,-8,48,23,0,0,Math.PI*2); ctx.stroke(); ctx.strokeStyle="#fff"; ctx.lineWidth=4; ctx.beginPath(); ctx.arc(24,-28,34,Math.PI,0); ctx.stroke(); ctx.fillStyle="#ffe15b"; ctx.beginPath(); ctx.arc(-35,-49,13,0,Math.PI*2); ctx.fill();
-    } else if (item.type === "highway") {
-      ctx.fillStyle="#8d9ba6"; ctx.fillRect(-72,-27,144,17); ctx.fillRect(-52,-10,9,35); ctx.fillRect(43,-10,9,35); ctx.strokeStyle="#fff"; ctx.lineWidth=2; for(let i=-58;i<60;i+=22){ctx.beginPath();ctx.moveTo(i,-18);ctx.lineTo(i+11,-18);ctx.stroke();} ctx.fillStyle="#f05b4f";ctx.fillRect(-18,-39,20,10);ctx.fillStyle="#ffe066";ctx.fillRect(28,-37,18,9);
+    } else if (item.type === "xizhou") {
+      ctx.fillStyle="#3e9f68";ctx.beginPath();ctx.ellipse(0,-12,63,28,0,0,Math.PI*2);ctx.fill();ctx.strokeStyle="#55c6ec";ctx.lineWidth=12;ctx.beginPath();ctx.moveTo(-67,-1);ctx.quadraticCurveTo(-15,-35,67,-8);ctx.stroke();ctx.fillStyle="#d4f08a";for(let i=-42;i<=42;i+=21){ctx.beginPath();ctx.arc(i,-37-Math.abs(i)*.15,10,0,Math.PI*2);ctx.fill();}
+    } else if (item.type === "hemei") {
+      ctx.fillStyle="#173f2a";ctx.beginPath();ctx.arc(-24,-20,34,0,Math.PI*2);ctx.arc(19,-31,39,0,Math.PI*2);ctx.fill();ctx.fillStyle="#9cff72";for(let i=0;i<10;i++){const a=i*.7;ctx.beginPath();ctx.arc(Math.sin(a)*48,-15-Math.cos(a)*32,3,0,Math.PI*2);ctx.fill();}
     } else if (item.type === "temple") {
       ctx.fillStyle="#c73d3d"; ctx.fillRect(-38,-36,76,36); ctx.fillStyle="#f0c34a"; ctx.beginPath(); ctx.moveTo(-52,-36);ctx.lineTo(-22,-59);ctx.lineTo(0,-48);ctx.lineTo(22,-59);ctx.lineTo(52,-36);ctx.closePath();ctx.fill(); ctx.fillStyle="#b92f33";ctx.fillRect(-29,-29,8,29);ctx.fillRect(21,-29,8,29);ctx.fillStyle="#f5df86";ctx.beginPath();ctx.arc(0,-20,9,0,Math.PI*2);ctx.fill();
-    } else if (item.type === "mountain") {
-      ctx.fillStyle="#3f9765";ctx.beginPath();ctx.moveTo(-64,0);ctx.quadraticCurveTo(-45,-72,0,-58);ctx.quadraticCurveTo(46,-72,65,0);ctx.closePath();ctx.fill();ctx.fillStyle="#72bd72";ctx.beginPath();ctx.arc(-20,-39,15,0,Math.PI*2);ctx.arc(8,-48,19,0,Math.PI*2);ctx.arc(30,-28,17,0,Math.PI*2);ctx.fill();ctx.fillStyle="#f1a6a6";ctx.beginPath();ctx.ellipse(4,-31,15,11,0,0,Math.PI*2);ctx.fill();ctx.fillStyle="#553b3b";ctx.beginPath();ctx.arc(-2,-34,2,0,Math.PI*2);ctx.arc(10,-34,2,0,Math.PI*2);ctx.fill();
+    } else if (item.type === "waterworks") {
+      ctx.fillStyle="#9fd8ed";for(let i=-1;i<=1;i++){ctx.beginPath();ctx.arc(i*36,-23,19,0,Math.PI*2);ctx.fill();ctx.strokeStyle="#eefbff";ctx.lineWidth=4;ctx.stroke();}ctx.fillStyle="#eef5f3";ctx.fillRect(-62,-8,124,12);ctx.fillStyle="#2275a8";ctx.fillRect(-30,-52,60,12);
+    } else if (item.type === "wenshan") {
+      ctx.fillStyle="#2f8c54";for(let i=0;i<4;i++){ctx.beginPath();ctx.ellipse(-43+i*29,-16-i*6,31,10,-.12,0,Math.PI*2);ctx.fill();}ctx.fillStyle="#b75a3e";ctx.fillRect(-18,-56,36,32);ctx.fillStyle="#f3d8b5";ctx.beginPath();ctx.moveTo(-27,-56);ctx.lineTo(0,-72);ctx.lineTo(27,-56);ctx.closePath();ctx.fill();ctx.fillStyle="#f0dc7e";ctx.beginPath();ctx.arc(43,-58,10,0,Math.PI*2);ctx.fill();
     } else {
       ctx.fillStyle="#43b8d1";ctx.fillRect(-75,-14,150,24);ctx.strokeStyle="#e6504d";ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(-55,-12);ctx.lineTo(-55,-65);ctx.moveTo(55,-12);ctx.lineTo(55,-65);ctx.moveTo(-55,-59);ctx.quadraticCurveTo(0,-26,55,-59);ctx.stroke();ctx.strokeStyle="#fff";ctx.lineWidth=2;for(let i=-45;i<50;i+=15){ctx.beginPath();ctx.moveTo(i,-52);ctx.lineTo(i,-13);ctx.stroke();}
     }
@@ -737,7 +862,7 @@
       return;
     }
     const horizon = h * .28;
-    const vanishingX = w * .5 - f.lateral * w * .18 - ((f.heading - 121 + 540) % 360 - 180) * .45;
+    const vanishingX = w * .5 - f.lateral * w * .18 - ((f.heading - routeBearing(f.progress) + 540) % 360 - 180) * .45;
     flightObstacles.forEach(item => {
       const d = item.p - f.progress;
       if (d < -.02 || d > .16) return;
@@ -790,7 +915,7 @@
     const safety = Math.max(0, 100 - f.collisions * 18);
     const title = success ? "實景 FPV 鏡頭抵達碧潭，航程完成！" : "電量耗盡，再試一次！";
     const copy = success ? `你從安康高中起飛，在 ${f.elapsed} 秒內經過 ${f.visited.size} 個新店特色地標並抵達碧潭；AI 共啟動 ${f.collisions} 次緊急避障。` : "這次沒有在電量耗盡前抵達碧潭。重新練習雙搖桿，或啟動一次 AI 導航協助。";
-    app.innerHTML = `<section class="experience drone-theme screen">${topBar("drone",1,1,"抵達碧潭")}<div class="experience-body"><div class="result-badge">🏞️</div><p class="kicker">REAL FPV ARRIVED · ANKANG → BITAN</p><h1 class="result-title">${title}</h1><p class="prompt result-copy">${copy}</p><div class="score-grid"><div class="score-item"><span>虛擬航程</span><strong>${f.elapsed}<small> 秒</small></strong><div class="score-bar"><i style="width:${Math.max(10,Math.min(100,130-f.elapsed))}%"></i></div></div><div class="score-item"><span>安全飛行</span><strong>${safety}<small> 分</small></strong><div class="score-bar"><i style="width:${safety}%"></i></div></div><div class="score-item"><span>地標辨識</span><strong>${f.visited.size}<small> / 6</small></strong><div class="score-bar"><i style="width:${f.visited.size/6*100}%"></i></div></div></div><div class="feedback"><strong>你剛才體驗了真正的無人機操作邏輯</strong><p>Google 衛星地圖提供地面視野、小地圖負責航向；降低高度看清細節，升高則掌握更大範圍，AI 視覺同時協助標示障礙物。</p></div><div class="action-row"><button class="primary-btn" type="button" data-launch-taiwan-flight>再飛一次</button><button class="secondary-btn" type="button" data-home>挑戰另一門課</button></div></div></section>`;
+    app.innerHTML = `<section class="experience drone-theme screen">${topBar("drone",1,1,"抵達碧潭")}<div class="experience-body"><div class="result-badge">🏞️</div><p class="kicker">REAL FPV ARRIVED · ANKANG → BITAN</p><h1 class="result-title">${title}</h1><p class="prompt result-copy">${copy}</p><div class="score-grid"><div class="score-item"><span>虛擬航程</span><strong>${f.elapsed}<small> 秒</small></strong><div class="score-bar"><i style="width:${Math.max(10,Math.min(100,130-f.elapsed))}%"></i></div></div><div class="score-item"><span>安全飛行</span><strong>${safety}<small> 分</small></strong><div class="score-bar"><i style="width:${safety}%"></i></div></div><div class="score-item"><span>地標辨識</span><strong>${f.visited.size}<small> / ${scenicLandmarks.length}</small></strong><div class="score-bar"><i style="width:${f.visited.size/scenicLandmarks.length*100}%"></i></div></div></div><div class="feedback"><strong>你剛才體驗了真正的無人機操作邏輯</strong><p>Google 衛星地圖提供地面視野、小地圖負責完整航向；降低高度看清細節，升高則掌握更大範圍，AI 視覺同時協助標示障礙物。</p></div><div class="action-row"><button class="primary-btn" type="button" data-launch-taiwan-flight>再飛一次</button><button class="secondary-btn" type="button" data-home>挑戰另一門課</button></div></div></section>`;
     focusMain();
   }
 

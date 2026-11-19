@@ -517,7 +517,7 @@ button:focus-visible, a:focus-visible { outline: 3px solid #f7b538; outline-offs
 .preview-rec { position:absolute; z-index:2; left:14px; top:12px; color:#ff6f73; font:900 11px ui-monospace,monospace; }
 .preview-map { min-height:190px; display:grid; place-items:center; align-content:center; gap:7px; border:1px solid rgba(89,242,234,.3); border-radius:22px; color:#d8fffb; background:radial-gradient(circle,#174d77,#06244f); font-weight:900; }
 .preview-map strong { font-size:48px; color:#57f0e7; }.preview-map small { opacity:.7; }
-.scenic-strip { display:grid; grid-template-columns:repeat(6,1fr); gap:7px; margin-top:13px; }
+.scenic-strip { display:grid; grid-template-columns:repeat(4,1fr); gap:7px; margin-top:13px; }
 .scenic-strip span { min-width:0; padding:9px 5px; border:1px solid rgba(255,255,255,.12); border-radius:12px; background:rgba(255,255,255,.06); text-align:center; font-size:10px; font-weight:850; }
 .scenic-strip b { display:grid; place-items:center; width:20px; height:20px; margin:0 auto 5px; border-radius:50%; color:#062956; background:#5af1e8; font-size:9px; }
 .map-source-status { display:flex; align-items:center; gap:12px; margin-top:16px; padding:12px 14px; border:1px solid rgba(255,255,255,.18); border-radius:14px; background:rgba(0,0,0,.16); font-size:14px; line-height:1.5; }
@@ -540,10 +540,23 @@ button:focus-visible, a:focus-visible { outline: 3px solid #f7b538; outline-offs
 .altitude-tape { position:absolute; z-index:8; left:12px; top:50%; min-width:48px; padding:8px 7px; border-left:2px solid #6df2e9; color:#fff; background:rgba(4,32,57,.42); transform:translateY(-50%); text-align:center; text-shadow:0 2px 5px rgba(0,0,0,.5); }
 .altitude-tape small,.altitude-tape strong,.altitude-tape span { display:block; }.altitude-tape small { color:#8ff8f2;font-size:8px; }.altitude-tape strong { font:900 20px ui-monospace,monospace; }.altitude-tape span { font-size:8px; }
 .scene-label { position:absolute; z-index:8; left:12px; bottom:53px; max-width:52%; padding:6px 10px; border:1px solid rgba(107,244,235,.48); border-radius:9px; color:#f2fffd; background:rgba(3,27,48,.72); font-size:10px; font-weight:900; letter-spacing:.04em; text-shadow:0 2px 5px rgba(0,0,0,.5); }
+.scene-label.is-card-open { opacity:0; transform:translateY(7px); }
+.landmark-arrival-card { position:absolute; z-index:11; left:70px; bottom:54px; width:min(430px,calc(100% - 90px)); min-height:124px; display:grid; grid-template-columns:142px minmax(0,1fr); gap:13px; padding:10px; border:1px solid rgba(109,255,244,.62); border-radius:18px; color:#f7fffe; background:linear-gradient(125deg,rgba(3,25,48,.94),rgba(9,50,66,.91)); box-shadow:0 16px 40px rgba(0,0,0,.42),inset 0 1px rgba(255,255,255,.08); backdrop-filter:blur(12px); opacity:0; transform:translateY(14px) scale(.98); pointer-events:none; transition:opacity .24s ease,transform .28s ease; }
+.landmark-arrival-card.show { opacity:1; transform:translateY(0) scale(1); pointer-events:auto; }
+.landmark-photo-frame { position:relative; min-width:0; height:104px; border-radius:12px; overflow:hidden; background:#102b3f; }
+.landmark-photo-frame img { display:block; width:100%; height:100%; object-fit:cover; }
+.landmark-photo-frame span { position:absolute; left:7px; bottom:7px; padding:4px 7px; border-radius:999px; color:#062b43; background:#6ff7ed; font-size:9px; font-weight:950; letter-spacing:.04em; }
+.landmark-card-copy { align-self:center; min-width:0; }
+.landmark-card-copy>small { display:block; margin-bottom:3px; color:#6ff7ed; font:900 9px ui-monospace,monospace; letter-spacing:.12em; }
+.landmark-card-copy h2 { margin:0; color:#fff; font-size:19px; line-height:1.25; }
+.landmark-card-copy p { display:-webkit-box; margin:5px 0 6px; overflow:hidden; color:rgba(242,255,253,.82); font-size:12px; line-height:1.45; -webkit-box-orient:vertical; -webkit-line-clamp:2; }
+.landmark-card-copy a { display:block; overflow:hidden; color:#a9e9e5; font-size:9px; line-height:1.3; text-decoration:none; text-overflow:ellipsis; white-space:nowrap; }
+.landmark-card-copy a:hover { color:#fff; text-decoration:underline; }
 .imagery-credit { position:absolute; z-index:9; right:11px; bottom:54px; padding:4px 6px; border-radius:5px; color:rgba(255,255,255,.82); background:rgba(0,16,29,.62); font-size:7px; text-decoration:none; }
 .google-imagery .imagery-credit { display:none; }
 .google-imagery .flight-message { bottom:28px; }
 .google-imagery .scene-label { bottom:74px; }
+.google-imagery .landmark-arrival-card { bottom:72px; }
 .fpv-landmark-pin { display:grid; justify-items:center; color:#fff; font-size:9px; font-weight:900; text-shadow:0 2px 5px rgba(0,0,0,.9); pointer-events:none; }
 .fpv-landmark-pin i { width:12px; height:12px; border:3px solid #fff; border-radius:50%; background:#14e2d7; box-shadow:0 0 0 4px rgba(20,226,215,.25),0 2px 7px rgba(0,0,0,.55); }
 .fpv-landmark-pin span { margin-top:5px; padding:3px 6px; border:1px solid rgba(125,255,246,.55); border-radius:7px; background:rgba(2,27,48,.82); white-space:nowrap; }
@@ -580,7 +593,7 @@ button:focus-visible, a:focus-visible { outline: 3px solid #f7b538; outline-offs
 @media (max-width:780px) {
   .map-source-status { align-items:flex-start; flex-direction:column; gap:4px; }
   .fpv-preview-card { grid-template-columns:1fr 112px; }
-  .scenic-strip { grid-template-columns:repeat(3,1fr); }
+  .scenic-strip { grid-template-columns:repeat(2,1fr); }
   .fpv-body .flight-hud { grid-template-columns:repeat(4,1fr); gap:5px; }
   .fpv-body .hud-item { padding:7px 6px; }.fpv-body .hud-item strong { font-size:11px; }
   .fpv-layout { display:block; }
@@ -588,6 +601,10 @@ button:focus-visible, a:focus-visible { outline: 3px solid #f7b538; outline-offs
   .mini-nav { position:absolute; z-index:20; right:10px; top:44px; width:152px; padding:7px; border-radius:15px; box-shadow:0 10px 22px rgba(0,0,0,.3); }
   .mini-nav .real-map { height:112px; }.mini-map-head { margin-bottom:5px;font-size:8px; }.mini-nav .map-credit { top:26px;right:10px; }
   .route-chips { display:none; }
+  .landmark-arrival-card { left:9px; bottom:54px; width:calc(100% - 18px); grid-template-columns:118px minmax(0,1fr); gap:10px; min-height:116px; }
+  .landmark-photo-frame { height:96px; }
+  .landmark-card-copy h2 { font-size:17px; }
+  .landmark-card-copy p { font-size:11px; }
   .remote-controller { grid-template-columns:1fr .82fr 1fr; gap:7px; padding:11px 8px; border-radius:23px; }
   .joystick { width:112px;height:112px; }.stick-knob { width:47px;height:47px; }
   .remote-screen { padding:10px 6px; }.remote-screen strong { font-size:13px; }.remote-screen .autopilot-btn { padding:0 5px;font-size:9px; }
@@ -598,6 +615,11 @@ button:focus-visible, a:focus-visible { outline: 3px solid #f7b538; outline-offs
   .fpv-camera { height:390px;border-radius:18px; }
   .camera-top { left:9px;right:9px;font-size:8px; }
   .mini-nav { width:137px;right:7px;top:42px; }.mini-nav .real-map { height:102px; }
+  .landmark-arrival-card { grid-template-columns:104px minmax(0,1fr); padding:8px; border-radius:15px; }
+  .landmark-photo-frame { height:90px; }
+  .landmark-card-copy>small { font-size:8px; }
+  .landmark-card-copy h2 { font-size:16px; }
+  .landmark-card-copy p { margin:4px 0; font-size:10px; }
   .remote-controller { grid-template-columns:1fr 76px 1fr; }
   .joystick { width:96px;height:96px; }.stick-knob { width:41px;height:41px; }
   .stick-block>strong { font-size:10px; }.stick-block>small { font-size:8px; }
