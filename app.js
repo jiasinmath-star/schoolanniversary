@@ -5,6 +5,10 @@
   const status = document.querySelector("#header-status");
   const toast = document.querySelector("#toast");
   const storageKey = "ankang-ai-experience-v1";
+  const countedStorageKey = "ankang-ai-global-counted-v1";
+  const countEndpoint = "/api/experience-counts";
+  const experienceCounts = { drone: null, body: null, language: null, business: null };
+  const pendingCountGames = new Set();
   let state = { game: null, step: 0, answers: [], scores: {}, locale: null, locked: false };
   let breathTimer = null;
   let flightFrame = null;
@@ -279,6 +283,62 @@
     try { localStorage.setItem(storageKey, JSON.stringify(progress)); } catch {}
   }
 
+  function readCountedGames() {
+    try { return JSON.parse(localStorage.getItem(countedStorageKey)) || {}; }
+    catch { return {}; }
+  }
+
+  function updateExperienceCountDisplay() {
+    document.querySelectorAll("[data-experience-count]").forEach(element => {
+      const game = element.dataset.experienceCount;
+      const count = experienceCounts[game];
+      element.textContent = Number.isFinite(count) ? `全體體驗 ${new Intl.NumberFormat("zh-TW").format(count)} 人次` : "全體人次載入中";
+    });
+  }
+
+  async function fetchExperienceCounts() {
+    try {
+      const response = await fetch(countEndpoint, { headers: { Accept: "application/json" }, cache: "no-store" });
+      if (!response.ok) throw new Error(`count fetch failed: ${response.status}`);
+      const payload = await response.json();
+      Object.keys(experienceCounts).forEach(game => {
+        const value = Number(payload.counts?.[game]);
+        experienceCounts[game] = Number.isFinite(value) ? value : 0;
+      });
+    } catch {
+      document.querySelectorAll("[data-experience-count]").forEach(element => { element.textContent = "全體人次暫時無法載入"; });
+      return;
+    }
+    updateExperienceCountDisplay();
+  }
+
+  async function recordGlobalExperience(game) {
+    if (!games[game] || pendingCountGames.has(game)) return;
+    const counted = readCountedGames();
+    if (counted[game]) return;
+    pendingCountGames.add(game);
+    try {
+      const response = await fetch(countEndpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({ game })
+      });
+      if (!response.ok) throw new Error(`count update failed: ${response.status}`);
+      const payload = await response.json();
+      Object.keys(experienceCounts).forEach(key => {
+        const value = Number(payload.counts?.[key]);
+        if (Number.isFinite(value)) experienceCounts[key] = value;
+      });
+      counted[game] = true;
+      try { localStorage.setItem(countedStorageKey, JSON.stringify(counted)); } catch {}
+      updateExperienceCountDisplay();
+    } catch {
+      // Keep the game unmarked so a later visit can retry when the shared counter is available.
+    } finally {
+      pendingCountGames.delete(game);
+    }
+  }
+
   function escapeText(value) {
     return String(value).replace(/[&<>'"]/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" }[char]));
   }
@@ -317,7 +377,7 @@
             <p class="eyebrow">Ankang AI Experience Lab</p>
             <h1>掃一掃，讓課程<br><em>開始回應你。</em></h1>
             <p class="lead">四個 1–3 分鐘的智慧互動任務。做選擇、看回饋、帶走一張屬於自己的課程結果。</p>
-            <span class="micro-note">所有分析只留在這台裝置，不需輸入姓名</span>
+            <span class="micro-note">不需輸入姓名；僅匿名累計體驗人次，課程結果留在這台裝置</span>
           </div>
           <div class="hero-visual" aria-hidden="true"><div class="orbit"></div><div class="ai-core">AI<span>×4</span></div></div>
         </div>
@@ -334,12 +394,13 @@
               <div class="tag-row">${game.tags.map(tag => `<span class="tag">${tag}</span>`).join("")}</div>
               <div class="card-actions">
                 <button class="play-btn" type="button" data-start="${key}">開始體驗</button>
-                <span class="done-mark">${progress[key] ? "✓ 已完成" : game.time}</span>
+                <span class="card-stats"><span class="experience-count" data-experience-count="${key}">全體人次載入中</span><span class="done-mark">${progress[key] ? "✓ 已完成" : game.time}</span></span>
               </div>
               <button class="text-btn" type="button" data-copy="${key}">複製此體驗連結</button>
             </article>`).join("")}
         </div>
       </section>`;
+    fetchExperienceCounts();
     focusMain();
   }
 
@@ -352,6 +413,7 @@
     clearInterval(breathTimer);
     stopFlightLoop();
     state = { game, step: 0, answers: [], scores: { safety: 0, planning: 0, ai: 0, map: 0, move: 0, recover: 0, language: 0 }, locale: null, locked: false };
+    recordGlobalExperience(game);
     setQuery(game);
     status.textContent = `${games[game].title}｜${games[game].time}`;
     if (game === "drone") renderTaiwanFlightIntro();
