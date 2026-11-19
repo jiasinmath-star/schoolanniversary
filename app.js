@@ -97,7 +97,8 @@
   const games = {
     drone: { title: "AI 無人機", icon: "⌁", time: "約 90 秒", desc: "從 Google 衛星空拍影像操控雙搖桿無人機，沿小地圖飛越新店地標抵達碧潭。", tags: ["Google 衛星", "雙搖桿", "AI 避障"] },
     body: { title: "身心調整", icon: "◌", time: "約 2 分鐘", desc: "回答四個身體感受問題，找出你此刻最需要的覺察方式。", tags: ["能力探索", "身體構圖", "30 秒練習"] },
-    language: { title: "第二外語", icon: "あ", time: "約 2–3 分鐘", desc: "選擇日、韓、德其中一站，完成咖啡館裡的三輪對話任務。", tags: ["角色扮演", "語音播放", "護照集章"] }
+    language: { title: "第二外語", icon: "あ", time: "約 2–3 分鐘", desc: "12 張日、韓、德外語牌混合挑戰，配對『你好』與『謝謝』並練習發音。", tags: ["12 張混合牌", "語音播放", "三國外語"] },
+    business: { title: "創意文學與實作", icon: "✎", time: "約 2–3 分鐘", desc: "經營安康飲食企業，每次前進 1～3 格，用有畫面的食品廣告文案賺取收入。", tags: ["1～3 格骰子", "廣告文案", "企業獲利"] }
   };
 
   const droneStages = [
@@ -163,21 +164,88 @@
   };
 
   const languageData = {
-    ja: { name: "日本", flag: "🇯🇵", locale: "ja-JP", hello: "こんにちは", roman: "Konnichiwa", questions: [
-      { npc: "店員說：いらっしゃいませ！", trans: "歡迎光臨！你想先有禮貌地打招呼。", options: ["こんにちは", "さようなら", "おやすみなさい"], correct: 0, explain: "こんにちは（Konnichiwa）是白天常用的招呼語。" },
-      { npc: "你想問：有什麼推薦？", trans: "選出最適合的日語說法。", options: ["これはいくらですか", "おすすめは何ですか", "駅はどこですか"], correct: 1, explain: "おすすめは何ですか（Osusume wa nan desu ka）就是『有什麼推薦？』。" },
-      { npc: "餐點送來了，店員說：どうぞ。", trans: "用一句話向店員道謝。", options: ["すみません", "いただきます", "ありがとうございます"], correct: 2, explain: "ありがとうございます（Arigatō gozaimasu）是禮貌的『謝謝』。" }
-    ], phrases: [["こんにちは", "你好"], ["おすすめは何ですか", "有什麼推薦？"], ["ありがとうございます", "謝謝您"]] },
-    ko: { name: "韓國", flag: "🇰🇷", locale: "ko-KR", hello: "안녕하세요", roman: "Annyeonghaseyo", questions: [
-      { npc: "店員說：어서 오세요!", trans: "歡迎光臨！你想先有禮貌地打招呼。", options: ["안녕하세요", "안녕히 가세요", "잘 자요"], correct: 0, explain: "안녕하세요（Annyeonghaseyo）是常用且有禮貌的招呼語。" },
-      { npc: "你想問：推薦的餐點是什麼？", trans: "選出最適合的韓語說法。", options: ["얼마예요?", "화장실이 어디예요?", "추천 메뉴가 뭐예요?"], correct: 2, explain: "추천 메뉴가 뭐예요?（Chucheon menyuga mwoyeyo?）就是『推薦的餐點是什麼？』。" },
-      { npc: "餐點送來了，店員說：맛있게 드세요!", trans: "用一句話向店員道謝。", options: ["감사합니다", "미안합니다", "괜찮아요"], correct: 0, explain: "감사합니다（Gamsahamnida）是正式、有禮貌的『謝謝』。" }
-    ], phrases: [["안녕하세요", "你好"], ["추천 메뉴가 뭐예요?", "推薦的餐點是什麼？"], ["감사합니다", "謝謝"]] },
-    de: { name: "德國", flag: "🇩🇪", locale: "de-DE", hello: "Guten Tag!", roman: "Guten Tag", questions: [
-      { npc: "店員說：Guten Tag!", trans: "你想先有禮貌地打招呼。", options: ["Gute Nacht!", "Guten Tag!", "Auf Wiedersehen!"], correct: 1, explain: "Guten Tag 是白天常見、禮貌的招呼語。" },
-      { npc: "你想問：您推薦什麼？", trans: "選出最適合的德語說法。", options: ["Was empfehlen Sie?", "Wo ist der Bahnhof?", "Wie viel kostet das?"], correct: 0, explain: "Was empfehlen Sie? 就是禮貌地詢問『您推薦什麼？』。" },
-      { npc: "餐點送來了，店員說：Bitte schön!", trans: "用一句話向店員道謝。", options: ["Entschuldigung", "Bis morgen", "Danke schön!"], correct: 2, explain: "Danke schön 是親切、有禮貌的『非常謝謝』。" }
-    ], phrases: [["Guten Tag!", "您好"], ["Was empfehlen Sie?", "您推薦什麼？"], ["Danke schön!", "非常謝謝"]] }
+    ja: { name: "日本", language: "日語", flag: "🇯🇵", locale: "ja-JP", hello: "こんにちは", roman: "Konnichiwa", phrases: {
+      hello: { translation: "你好", foreign: "こんにちは", roman: "Konnichiwa", phonetic: "空你七哇", icon: "👋", note: "白天見面時常用的招呼語。" },
+      thanks: { translation: "謝謝", foreign: "ありがとう", roman: "Arigatō", phonetic: "阿里嘎多", icon: "🙏", note: "向熟悉的人表達感謝；更禮貌可說「ありがとうございます」。" }
+    } },
+    ko: { name: "韓國", language: "韓語", flag: "🇰🇷", locale: "ko-KR", hello: "안녕하세요", roman: "Annyeonghaseyo", phrases: {
+      hello: { translation: "你好", foreign: "안녕하세요", roman: "Annyeonghaseyo", phonetic: "安妞哈誰唷", icon: "👋", note: "日常最常用、也很有禮貌的問候語。" },
+      thanks: { translation: "謝謝", foreign: "감사합니다", roman: "Gamsahamnida", phonetic: "康撒哈密達", icon: "🙏", note: "正式且有禮貌的感謝說法。" }
+    } },
+    de: { name: "德國", language: "德語", flag: "🇩🇪", locale: "de-DE", hello: "Hallo!", roman: "Hallo", phrases: {
+      hello: { translation: "你好", foreign: "Hallo!", roman: "Hallo", phonetic: "哈囉", icon: "👋", note: "輕鬆、常見的日常招呼語。" },
+      thanks: { translation: "謝謝", foreign: "Danke!", roman: "Danke", phonetic: "丹可", icon: "🙏", note: "最常用的感謝說法。" }
+    } }
+  };
+
+  const businessSpaces = [
+    { name: "晨光橙香氣泡飲", short: "橙香氣泡飲", icon: "🍊", type: "飲料", choices: [
+      { copy: "橙子汽水，冰涼又好喝。", revenue: 420, tier: "basic" },
+      { copy: "一口橙香，替午後按下清爽鍵。", revenue: 980, tier: "benefit" },
+      { copy: "陽光掉進氣泡裡，啵一聲，把悶熱變成橙色的好心情。", revenue: 1480, tier: "story" }
+    ] },
+    { name: "蜂蜜檸檬茶", short: "蜂蜜檸檬", icon: "🍋", type: "飲料", choices: [
+      { copy: "檸檬的亮、蜂蜜的柔，剛好是一杯放學後的平衡。", revenue: 1520, tier: "story" },
+      { copy: "酸甜順口，課間補水的清新選擇。", revenue: 910, tier: "benefit" },
+      { copy: "蜂蜜加檸檬，酸酸甜甜。", revenue: 450, tier: "basic" }
+    ] },
+    { name: "黑糖珍珠鮮奶", short: "黑糖珍珠", icon: "🧋", type: "飲料", choices: [
+      { copy: "黑糖香、珍珠Q、鮮奶濃。", revenue: 720, tier: "benefit" },
+      { copy: "杯壁的黑糖像晚霞慢慢流下，每一口都嚼得到甜甜的放學時光。", revenue: 1580, tier: "story" },
+      { copy: "好喝的黑糖珍珠鮮奶。", revenue: 460, tier: "basic" }
+    ] },
+    { name: "青梅冰茶", short: "青梅冰茶", icon: "🍵", type: "飲料", choices: [
+      { copy: "酸香回甘，冰涼解膩。", revenue: 880, tier: "benefit" },
+      { copy: "一顆青梅，把夏天皺起的眉頭，泡成一杯清涼的微笑。", revenue: 1450, tier: "story" },
+      { copy: "青梅口味的冰茶。", revenue: 390, tier: "basic" }
+    ] },
+    { name: "海鹽洋芋片", short: "海鹽洋芋片", icon: "🥔", type: "零食", choices: [
+      { copy: "喀嚓一聲，像把海風和午後陽光一起咬進嘴裡。", revenue: 1500, tier: "story" },
+      { copy: "薄脆不膩，海鹽襯出馬鈴薯香。", revenue: 960, tier: "benefit" },
+      { copy: "鹹鹹脆脆的洋芋片。", revenue: 410, tier: "basic" }
+    ] },
+    { name: "金黃起司脆餅", short: "起司脆餅", icon: "🧀", type: "餅乾", choices: [
+      { copy: "起司口味的脆餅乾。", revenue: 400, tier: "basic" },
+      { copy: "濃郁起司、方形小包，隨手分享剛剛好。", revenue: 890, tier: "benefit" },
+      { copy: "金黃小方塊一打開，起司香就先跑出來，邀大家一起喀嚓。", revenue: 1490, tier: "story" }
+    ] },
+    { name: "青蔥蘇打餅", short: "青蔥蘇打餅", icon: "🧅", type: "餅乾", choices: [
+      { copy: "層層酥脆，青蔥鹹香，讀書空檔也能吃得不膩。", revenue: 940, tier: "benefit" },
+      { copy: "青蔥落在一層層餅乾上，喀嚓聲替安靜的自習時間加了標點。", revenue: 1510, tier: "story" },
+      { copy: "有青蔥的蘇打餅乾。", revenue: 380, tier: "basic" }
+    ] },
+    { name: "巧克力夾心餅", short: "巧克力夾心", icon: "🍫", type: "餅乾", choices: [
+      { copy: "雙層可可餅，夾住濃滑巧克力。", revenue: 920, tier: "benefit" },
+      { copy: "咬開深色餅乾，巧克力像藏在書頁裡的小驚喜，悄悄甜了今天。", revenue: 1560, tier: "story" },
+      { copy: "巧克力口味的夾心餅。", revenue: 430, tier: "basic" }
+    ] },
+    { name: "草莓星星軟糖", short: "草莓軟糖", icon: "🍓", type: "零食", choices: [
+      { copy: "草莓軟糖，甜甜QQ。", revenue: 420, tier: "basic" },
+      { copy: "星星造型、草莓果香，小包裝方便分享。", revenue: 900, tier: "benefit" },
+      { copy: "把草莓做成一袋小星星，分一顆給朋友，今天就多一點閃亮。", revenue: 1530, tier: "story" }
+    ] },
+    { name: "海苔米果", short: "海苔米果", icon: "🍘", type: "零食", choices: [
+      { copy: "米香酥脆，海苔鹹香，一口一個不沾手。", revenue: 930, tier: "benefit" },
+      { copy: "米粒變成酥脆的小月亮，披上海苔外衣，陪你走過每個課間。", revenue: 1470, tier: "story" },
+      { copy: "有海苔味的米果。", revenue: 390, tier: "basic" }
+    ] },
+    { name: "焦糖爆米花", short: "焦糖爆米花", icon: "🍿", type: "零食", choices: [
+      { copy: "每一顆都裹上焦糖，香甜酥脆。", revenue: 970, tier: "benefit" },
+      { copy: "焦糖香在袋口排隊，爆米花一開場，平凡午後立刻變成好看的電影。", revenue: 1600, tier: "story" },
+      { copy: "甜甜的焦糖爆米花。", revenue: 440, tier: "basic" }
+    ] },
+    { name: "香辣花生", short: "香辣花生", icon: "🥜", type: "零食", choices: [
+      { copy: "酥脆花生配上微辣香料，越嚼越香。", revenue: 950, tier: "benefit" },
+      { copy: "第一口是花生香，第二口辣意追上來，像一場越跑越熱鬧的接力賽。", revenue: 1540, tier: "story" },
+      { copy: "辣辣的花生零食。", revenue: 400, tier: "basic" }
+    ] }
+  ];
+
+  const businessPositions = [[1,1],[1,2],[1,3],[1,4],[2,4],[3,4],[4,4],[4,3],[4,2],[4,1],[3,1],[2,1]];
+  const businessTierFeedback = {
+    story: { label: "畫面故事文案", copy: "你把味道、聲音或情境寫成一幅畫，讓顧客不只看見商品，也想像自己正在享用它。" },
+    benefit: { label: "產品特色文案", copy: "你清楚說出商品特色與適合的時機，資訊完整，也能吸引有需要的顧客。" },
+    basic: { label: "基本說明文案", copy: "商品說明正確，但畫面感較少；加入感官、情境或故事，會更容易被記住。" }
   };
 
   function readProgress() {
@@ -218,23 +286,24 @@
     state = { game: null, step: 0, answers: [], scores: {}, locale: null, locked: false };
     setQuery(null);
     document.documentElement.style.setProperty("--page-bg", "#eef4fb");
-    status.textContent = "三站任選｜免登入";
+    status.textContent = "四站任選｜免登入";
     const progress = readProgress();
-    const doneCount = Object.values(progress).filter(Boolean).length;
+    const gameCount = Object.keys(games).length;
+    const doneCount = Object.keys(games).filter(key => progress[key]).length;
     app.innerHTML = `
       <section class="screen">
         <div class="hero">
           <div>
             <p class="eyebrow">Ankang AI Experience Lab</p>
             <h1>掃一掃，讓課程<br><em>開始回應你。</em></h1>
-            <p class="lead">三個 1–3 分鐘的智慧互動任務。做選擇、看回饋、帶走一張屬於自己的課程結果。</p>
+            <p class="lead">四個 1–3 分鐘的智慧互動任務。做選擇、看回饋、帶走一張屬於自己的課程結果。</p>
             <span class="micro-note">所有分析只留在這台裝置，不需輸入姓名</span>
           </div>
-          <div class="hero-visual" aria-hidden="true"><div class="orbit"></div><div class="ai-core">AI<span>×3</span></div></div>
+          <div class="hero-visual" aria-hidden="true"><div class="orbit"></div><div class="ai-core">AI<span>×4</span></div></div>
         </div>
         <div class="section-title">
           <h2>選擇你的體驗</h2>
-          <p>本機完成進度 ${doneCount} / 3</p>
+          <p>本機完成進度 ${doneCount} / ${gameCount}</p>
         </div>
         <div class="game-grid">
           ${Object.entries(games).map(([key, game]) => `
@@ -256,7 +325,7 @@
 
   function topBar(theme, step, total, label) {
     const pct = Math.min(100, Math.round((step / total) * 100));
-    return `<div class="experience-top"><div class="top-line"><button class="back-btn" type="button" data-home>← 回到三門課程</button><span class="step-label">${label}</span></div><div class="progress" style="--progress:${pct}%"><span></span></div></div>`;
+    return `<div class="experience-top"><div class="top-line"><button class="back-btn" type="button" data-home>回到四門課程</button><span class="step-label">${label}</span></div><div class="progress" style="--progress:${pct}%"><span></span></div></div>`;
   }
 
   function startGame(game) {
@@ -267,7 +336,8 @@
     status.textContent = `${games[game].title}｜${games[game].time}`;
     if (game === "drone") renderTaiwanFlightIntro();
     if (game === "body") renderBody();
-    if (game === "language") renderLanguageSelect();
+    if (game === "language") startLanguageMemory();
+    if (game === "business") startBusinessGame();
     focusMain();
   }
 
@@ -326,7 +396,7 @@
             <div class="fpv-real-map" id="fpv-real-map" aria-hidden="true"></div>
             <canvas id="fpv-canvas"></canvas>
             <div class="camera-scanlines"></div>
-            <div class="camera-top"><span class="rec-dot">● REC</span><span id="camera-heading">${headingName(routeBearing(0))} ${Math.round(routeBearing(0))}°</span><span>FPV 1080P</span></div>
+            <div class="camera-top"><span class="rec-dot">● REC</span><span id="camera-heading">${headingName(routeBearing(0))} ${Math.round(routeBearing(0))}°</span><span id="camera-attitude">TILT 58°</span></div>
             <div class="camera-crosshair" aria-hidden="true"><i></i><b></b></div>
             <div class="altitude-tape"><small>ALT</small><strong id="camera-altitude">18</strong><span>m</span></div>
             <div class="scene-label" id="scene-label">真實空拍｜安康高中</div>
@@ -486,7 +556,18 @@
     try {
       const routePath = realFlightRoute.map(googlePosition);
       const baseOptions = { disableDefaultUI: true, gestureHandling: "none", keyboardShortcuts: false, clickableIcons: false, backgroundColor: "#0b2f46" };
-      googleCameraMap = new maps.Map(cameraContainer, { ...baseOptions, center: googlePosition(schoolCoordinate), zoom: 19, mapTypeId: maps.MapTypeId.SATELLITE, tilt: 0, heading: routeBearing(0), isFractionalZoomEnabled: true });
+      googleCameraMap = new maps.Map(cameraContainer, {
+        ...baseOptions,
+        center: googlePosition(schoolCoordinate),
+        zoom: 19,
+        mapTypeId: maps.MapTypeId.SATELLITE,
+        renderingType: maps.RenderingType.VECTOR,
+        tiltInteractionEnabled: false,
+        headingInteractionEnabled: false,
+        tilt: 58,
+        heading: routeBearing(0),
+        isFractionalZoomEnabled: true
+      });
       googleMiniMap = new maps.Map(miniContainer, { ...baseOptions, center: googlePosition(schoolCoordinate), zoom: 14.5, mapTypeId: maps.MapTypeId.ROADMAP, isFractionalZoomEnabled: true });
       new maps.Polyline({ path: routePath, geodesic: true, strokeColor: "#041c33", strokeOpacity: .5, strokeWeight: 9, map: googleCameraMap });
       new maps.Polyline({ path: routePath, geodesic: true, strokeColor: "#63fff2", strokeOpacity: .9, strokeWeight: 3, map: googleCameraMap });
@@ -506,6 +587,13 @@
       });
       googleMapsMode = true;
       field.classList.add("imagery-ready", "google-imagery");
+      maps.event.addListenerOnce(googleCameraMap, "tilesloaded", () => {
+        if (!googleCameraMap || !document.querySelector("#flight-field")) return;
+        const rendering = String(googleCameraMap.getRenderingType?.() || "unknown");
+        field.dataset.mapRendering = rendering;
+        field.classList.toggle("simulated-perspective", rendering !== "VECTOR");
+        updateGoogleFlightMaps(true);
+      });
       panel.classList.add("map-ready", "google-map-ready");
       const imageryCredit = document.querySelector("#imagery-credit");
       if (imageryCredit) { imageryCredit.textContent = "Google 衛星地圖"; imageryCredit.href = "https://www.google.com/maps"; }
@@ -617,17 +705,26 @@
     } catch { flightMap = null; }
   }
 
+  function flightCameraAttitude(f) {
+    const routeHeading = routeBearing(f.progress);
+    const heightRatio = Math.max(0, Math.min(1, (f.altitude - 6) / 52));
+    const headingError = ((f.heading - routeHeading + 540) % 360) - 180;
+    const manualPitch = f.auto ? Math.sin(f.progress * Math.PI * 6) * 1.8 : f.controls.pitch * 7;
+    const bank = Math.max(-12, Math.min(12, f.auto ? -headingError * .24 : -(f.controls.roll * 10 + f.controls.yaw * 5)));
+    const tilt = Math.max(38, Math.min(67, 62 - heightRatio * 15 + manualPitch));
+    return { routeHeading, heightRatio, heading: (f.heading + 360) % 360, tilt, bank };
+  }
+
   function updateFpvRealMap(force = false) {
     const f = state.flight;
     if (!f || !flightCameraMap || !flightCameraMap.isStyleLoaded()) return;
     const center = routeCoordinate(f.progress, f.lateral);
-    const heightRatio = Math.max(0, Math.min(1, (f.altitude - 6) / 52));
-    const yawOffset = ((f.heading - routeBearing(f.progress) + 540) % 360 - 180) * .38;
+    const camera = flightCameraAttitude(f);
     flightCameraMap.jumpTo({
       center,
-      zoom: 19 - heightRatio * 2.2,
-      bearing: routeBearing(f.progress) + yawOffset,
-      pitch: 72 - heightRatio * 15
+      zoom: 19 - camera.heightRatio * 2.2,
+      bearing: camera.heading,
+      pitch: camera.tilt
     });
     if (force) flightCameraMap.resize();
   }
@@ -637,14 +734,30 @@
     if (!f || !googleMapsMode || !googleCameraMap || !googleMiniMap) return;
     const coordinate = routeCoordinate(f.progress, f.lateral);
     const center = googlePosition(coordinate);
-    const heightRatio = Math.max(0, Math.min(1, (f.altitude - 6) / 52));
-    const yawOffset = ((f.heading - routeBearing(f.progress) + 540) % 360 - 180) * .38;
+    const camera = flightCameraAttitude(f);
     googleCameraMap.moveCamera({
       center,
-      zoom: 19.4 - heightRatio * 2.7,
-      heading: routeBearing(f.progress) + yawOffset,
-      tilt: 0
+      zoom: 19.4 - camera.heightRatio * 2.7,
+      heading: camera.heading,
+      tilt: camera.tilt
     });
+    const field = document.querySelector("#flight-field");
+    if (field) {
+      const initialHeading = routeBearing(0);
+      const headingDelta = ((camera.heading - initialHeading + 540) % 360) - 180;
+      const visualYaw = Math.max(-28, Math.min(28, -headingDelta * .32));
+      const visualPitch = 10 + (camera.tilt - 38) * .42;
+      const visualBank = camera.bank * .55;
+      const cameraContainer = document.querySelector("#fpv-real-map");
+      cameraContainer?.style.setProperty("--fpv-visual-yaw", `${visualYaw.toFixed(2)}deg`);
+      cameraContainer?.style.setProperty("--fpv-visual-pitch", `${visualPitch.toFixed(2)}deg`);
+      cameraContainer?.style.setProperty("--fpv-visual-bank", `${visualBank.toFixed(2)}deg`);
+      field.dataset.cameraHeading = camera.heading.toFixed(1);
+      field.dataset.cameraTilt = camera.tilt.toFixed(1);
+      field.dataset.cameraBank = camera.bank.toFixed(1);
+      field.dataset.visualYaw = visualYaw.toFixed(1);
+      field.dataset.visualPitch = visualPitch.toFixed(1);
+    }
     if (force) {
       const bounds = new window.google.maps.LatLngBounds();
       realFlightRoute.forEach(item => bounds.extend(googlePosition(item)));
@@ -883,7 +996,10 @@
     document.querySelector("#hud-altitude").textContent = `${Math.round(f.altitude)} m`;
     document.querySelector("#hud-distance").textContent = `${Math.round(f.progress * 100)}%`;
     document.querySelector("#camera-altitude").textContent = Math.round(f.altitude);
-    document.querySelector("#camera-heading").textContent = `${headingName(f.heading)} ${Math.round(f.heading)}°`;
+    const camera = flightCameraAttitude(f);
+    document.querySelector("#camera-heading").textContent = `${headingName(camera.heading)} ${Math.round(camera.heading)}°`;
+    const attitude = document.querySelector("#camera-attitude");
+    if (attitude) attitude.textContent = `TILT ${Math.round(camera.tilt)}° · BANK ${Math.round(camera.bank)}°`;
     const next = scenicLandmarks.find(item => item.p > Math.max(.02, f.progress + .01)) || scenicLandmarks.at(-1);
     document.querySelector("#hud-next").textContent = next.short;
     const current = scenicLandmarks.slice().reverse().find(item => f.progress >= item.p - .035) || scenicLandmarks[0];
@@ -1004,46 +1120,214 @@
     breathTimer = window.setInterval(update, 1000);
   }
 
-  function renderLanguageSelect() {
-    app.innerHTML = `<section class="experience language-theme screen">${topBar("language", 0, 3, "選擇目的地")}<div class="experience-body"><p class="kicker">AI LANGUAGE PASSPORT</p><h1>今天想去哪一站？</h1><p class="prompt">你的 AI 旅伴會帶你走進當地咖啡館。聽一句、選一句，完成三輪對話就能獲得電子護照章。</p><div class="country-grid">${Object.entries(languageData).map(([key, d]) => `<button class="country" type="button" data-country="${key}"><span class="flag">${d.flag}</span><strong>${d.name}</strong><small>${d.hello} · ${d.roman}</small></button>`).join("")}</div><p class="safety-note">可使用喇叭按鈕播放語音；不同手機的系統發音可能略有差異。</p></div></section>`;
+  function shuffleLanguageDeck(items) {
+    const shuffled = [...items];
+    for (let i = shuffled.length - 1; i > 0; i -= 1) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
   }
 
-  function chooseCountry(locale) {
-    state.locale = locale;
+  function startLanguageMemory() {
     state.step = 0;
     state.answers = [];
-    state.scores.language = 0;
     state.locked = false;
-    renderLanguageQuestion();
+    const deck = Object.keys(languageData).flatMap(locale =>
+      ["hello", "hello", "thanks", "thanks"].map((phraseKey, index) => ({
+        id: `${locale}-${phraseKey}-${index}`,
+        locale,
+        phraseKey,
+        pairKey: `${locale}-${phraseKey}`,
+        removed: false
+      }))
+    );
+    state.languageGame = {
+      deck: shuffleLanguageDeck(deck),
+      flipped: [], matched: [], attempts: 0, locked: false, lesson: null,
+      startedAt: performance.now(), completedAt: 0
+    };
+    renderLanguageMemory();
     focusMain();
   }
 
-  function renderLanguageQuestion() {
-    const d = languageData[state.locale];
-    const result = state.step >= d.questions.length;
-    const q = d.questions[state.step];
-    app.innerHTML = `<section class="experience language-theme screen">${topBar("language", result ? 3 : state.step, 3, result ? "護照完成" : `${d.flag} 對話 ${state.step + 1} / 3`)}<div class="experience-body">${result ? languageResult() : `<p class="kicker">${d.name}｜CAFÉ MISSION</p><h1>${state.step === 0 ? "走進咖啡館" : state.step === 1 ? "詢問推薦" : "完成點餐"}</h1><div class="dialogue"><div class="dialogue-label"><span>情境對話</span><button class="speech-btn" type="button" data-speak="${escapeText(q.npc.replace(/^.*：/, ""))}" data-locale="${d.locale}" aria-label="播放外語句子">🔊</button></div><p class="foreign-line">${q.npc}</p><p class="translation">${q.trans}</p></div><div class="choice-list">${q.options.map((option, i) => `<button class="choice" type="button" data-language-choice="${i}"><span class="choice-key">${String.fromCharCode(65 + i)}</span><span><strong>${option}</strong></span><span class="choice-arrow">›</span></button>`).join("")}</div><div id="feedback-slot"></div>`}</div></section>`;
+  function renderLanguageMemory() {
+    const game = state.languageGame;
+    if (!game) return startLanguageMemory();
+    const remaining = game.deck.filter(card => !card.removed);
+    const matchedCount = game.matched.length;
+    const lessonLanguage = game.lesson ? languageData[game.lesson.locale] : null;
+    const lesson = game.lesson ? lessonLanguage.phrases[game.lesson.phraseKey] : null;
+    app.innerHTML = `<section class="experience language-theme screen">${topBar("language", matchedCount, 6, `已收下 ${matchedCount} / 6 組`)}<div class="experience-body"><p class="kicker">JAPAN · KOREA · GERMANY</p><h1>12 張外語牌混合挑戰</h1><p class="prompt">日語、韓語、德語的「你好」與「謝謝」全混在一起。記住位置，找出同一國、同一個詞的兩張牌。</p><div class="memory-stage"><div class="memory-table-head"><span id="memory-status">翻開兩張牌，找出完全相同的外語文字</span><b>嘗試 ${game.attempts} 次｜剩下 ${remaining.length} 張</b></div><div class="memory-grid" data-count="${remaining.length}">${remaining.map((card, index) => { const d = languageData[card.locale]; const phrase = d.phrases[card.phraseKey]; const flipped = game.flipped.includes(card.id) || game.lesson?.cardIds.includes(card.id); return `<button class="memory-card ${flipped ? "is-flipped" : ""}" type="button" data-memory-card="${card.id}" aria-label="第 ${index + 1} 張牌${flipped ? `，${d.language}${phrase.translation}，${phrase.foreign}` : "，尚未翻開"}" aria-pressed="${flipped}" ${game.locked || flipped ? "disabled" : ""}><span class="memory-card-inner"><span class="memory-face memory-back"><i>🌏</i><strong>?</strong><small>日・韓・德</small></span><span class="memory-face memory-front"><i>${d.flag} ${phrase.icon}</i><small>${d.language}｜${phrase.translation}</small><strong>${phrase.foreign}</strong><em>${phrase.roman}</em></span></span></button>`; }).join("")}</div>${lesson ? `<aside class="memory-lesson" role="dialog" aria-modal="true" aria-label="${lessonLanguage.language}${lesson.translation}的發音教學"><span class="lesson-success">${lessonLanguage.flag} ${lessonLanguage.language}配對成功</span><div class="lesson-icon">${lesson.icon}</div><p>${lesson.translation}</p><h2>${lesson.foreign}</h2><strong>${lesson.roman}</strong><div class="phonetic-help"><small>中文近似音</small><b>${lesson.phonetic}</b></div><p class="lesson-note">${lesson.note}</p><div class="lesson-actions"><button class="speech-btn lesson-speech" type="button" data-speak="${escapeText(lesson.foreign)}" data-locale="${lessonLanguage.locale}" aria-label="播放 ${escapeText(lesson.foreign)}">🔊 聽發音</button><button class="primary-btn" type="button" data-memory-collect>我會了，收下這組牌</button></div></aside>` : ""}</div><p class="memory-tip">牌背完全相同；翻開後可用國旗、圖案、文字和聲音一起記憶。</p></div></section>`;
   }
 
-  function pickLanguage(index) {
-    if (state.locked) return;
-    state.locked = true;
-    const d = languageData[state.locale];
-    const q = d.questions[state.step];
-    const correct = index === q.correct;
-    if (correct) state.scores.language += 1;
-    state.answers.push(index);
-    document.querySelectorAll("[data-language-choice]").forEach((btn, i) => { btn.disabled = true; if (i === q.correct) btn.classList.add("correct"); else if (i === index) btn.classList.add("wrong"); });
-    document.querySelector("#feedback-slot").innerHTML = `<div class="feedback"><strong>${correct ? "答對了！AI 旅伴替你蓋下一格" : "差一點，AI 旅伴給你一句提示"}</strong><p>${q.explain}</p></div><div class="action-row"><button class="primary-btn" type="button" data-language-next>${state.step === 2 ? "領取護照章" : "繼續對話"} →</button><button class="speech-btn" type="button" data-speak="${escapeText(q.options[q.correct])}" data-locale="${d.locale}" aria-label="播放正確句子">🔊</button></div>`;
+  function flipLanguageCard(cardId) {
+    const game = state.languageGame;
+    if (!game || game.locked || game.flipped.includes(cardId)) return;
+    const card = game.deck.find(item => item.id === cardId && !item.removed);
+    if (!card) return;
+    game.flipped.push(card.id);
+    const button = [...document.querySelectorAll("[data-memory-card]")].find(item => item.dataset.memoryCard === card.id);
+    button?.classList.add("is-flipped");
+    button?.setAttribute("aria-pressed", "true");
+    if (button) button.disabled = true;
+    const statusLine = document.querySelector("#memory-status");
+    if (game.flipped.length === 1) {
+      if (statusLine) statusLine.textContent = "再翻一張，看看是不是同一個字";
+      return;
+    }
+    game.attempts += 1;
+    const [firstId, secondId] = game.flipped;
+    const first = game.deck.find(item => item.id === firstId);
+    const second = game.deck.find(item => item.id === secondId);
+    game.locked = true;
+    if (first.pairKey === second.pairKey) {
+      const d = languageData[first.locale];
+      game.lesson = { locale: first.locale, phraseKey: first.phraseKey, pairKey: first.pairKey, cardIds: [firstId, secondId] };
+      if (statusLine) statusLine.textContent = "配對成功！準備進入發音教學";
+      speak(d.phrases[first.phraseKey].foreign, d.locale);
+      window.setTimeout(renderLanguageMemory, 520);
+      return;
+    }
+    if (statusLine) statusLine.textContent = "這兩張不同，記住位置再試一次";
+    window.setTimeout(() => {
+      game.flipped.forEach(id => {
+        const cardButton = [...document.querySelectorAll("[data-memory-card]")].find(item => item.dataset.memoryCard === id);
+        cardButton?.classList.remove("is-flipped");
+        cardButton?.setAttribute("aria-pressed", "false");
+        if (cardButton) cardButton.disabled = false;
+      });
+      game.flipped = [];
+      game.locked = false;
+      const status = document.querySelector("#memory-status");
+      if (status) status.textContent = "再試一次，找出相同的外語文字";
+    }, 900);
   }
 
-  function languageResult() {
+  function collectLanguagePair() {
+    const game = state.languageGame;
+    if (!game?.lesson) return;
+    const lesson = game.lesson;
+    lesson.cardIds.forEach(id => {
+      const card = [...document.querySelectorAll("[data-memory-card]")].find(item => item.dataset.memoryCard === id);
+      card?.classList.add("is-removing");
+    });
+    document.querySelector("[data-memory-collect]")?.setAttribute("disabled", "");
+    window.setTimeout(() => {
+      game.deck.forEach(card => { if (lesson.cardIds.includes(card.id)) card.removed = true; });
+      if (!game.matched.includes(lesson.pairKey)) game.matched.push(lesson.pairKey);
+      game.flipped = [];
+      game.lesson = null;
+      game.locked = false;
+      if (game.deck.every(card => card.removed)) renderLanguageResult();
+      else renderLanguageMemory();
+    }, 620);
+  }
+
+  function renderLanguageResult() {
+    const game = state.languageGame;
+    if (!game) return startLanguageMemory();
+    if (!game.completedAt) game.completedAt = performance.now();
+    const elapsed = Math.max(1, Math.round((game.completedAt - game.startedAt) / 1000));
     complete("language");
-    const d = languageData[state.locale];
-    const score = state.scores.language;
-    const title = score === 3 ? `${d.name}情境溝通達人` : score === 2 ? `${d.name}自信旅行者` : `${d.name}勇敢開口新手`;
-    const copy = score === 3 ? "你能在招呼、詢問與道謝三個時機選出合適表達，已完成一段有禮貌的微型對話。" : "語言任務不是一次答對，而是願意聽、模仿並再次開口。你已經收下三句可以立刻使用的表達。";
-    return `<div class="result-badge">${d.flag}</div><p class="kicker">LANGUAGE PASSPORT</p><h1 class="result-title">${title}</h1><p class="prompt result-copy">${copy}</p><div class="passport"><div class="passport-head">ANKANG · ${d.name.toUpperCase()} · ${score}/3</div><div class="stamp-row">${[0,1,2].map(i => `<span class="stamp ${i < score ? "" : "off"}">${i < score ? "✓" : "·"}</span>`).join("")}</div><strong>我的三句旅行用語</strong><ul class="phrase-list">${d.phrases.map(([foreign, trans]) => `<li><button class="speech-btn" type="button" data-speak="${escapeText(foreign)}" data-locale="${d.locale}" aria-label="播放 ${escapeText(foreign)}">🔊</button> <b>${foreign}</b>｜${trans}</li>`).join("")}</ul></div><div class="feedback"><strong>這就是第二外語課程的核心</strong><p>看見、聽見、說出來。從語言進入情境，再從情境理解文化與溝通方式。</p></div><div class="action-row"><button class="primary-btn" type="button" data-restart="language">換一個國家</button><button class="secondary-btn" type="button" data-home>挑戰另一門課</button></div>`;
+    const phraseSummary = Object.values(languageData).flatMap(d => Object.values(d.phrases).map(phrase => `<article><span>${d.flag} ${phrase.icon}</span><div><small>${d.language}｜${phrase.translation}</small><strong>${phrase.foreign}</strong><em>${phrase.roman}｜${phrase.phonetic}</em></div><button class="speech-btn" type="button" data-speak="${escapeText(phrase.foreign)}" data-locale="${d.locale}" aria-label="播放 ${escapeText(phrase.foreign)}">🔊</button></article>`)).join("");
+    app.innerHTML = `<section class="experience language-theme screen">${topBar("language", 6, 6, "全部配對完成")}<div class="experience-body"><div class="result-badge">🌏</div><p class="kicker">MEMORY MATCH COMPLETE</p><h1 class="result-title">三國外語配對成功！</h1><p class="prompt result-copy">你已經把日語、韓語、德語的「你好」與「謝謝」六組牌全部收下，並完成文字與發音練習。</p><div class="score-grid"><div class="score-item"><span>完成配對</span><strong>6<small> / 6</small></strong><div class="score-bar"><i style="width:100%"></i></div></div><div class="score-item"><span>翻牌嘗試</span><strong>${game.attempts}<small> 次</small></strong><div class="score-bar"><i style="width:${Math.max(20, 125 - game.attempts * 5)}%"></i></div></div><div class="score-item"><span>完成時間</span><strong>${elapsed}<small> 秒</small></strong><div class="score-bar"><i style="width:${Math.max(20, 150 - elapsed)}%"></i></div></div></div><div class="memory-summary">${phraseSummary}</div><div class="feedback"><strong>記憶的祕訣：圖像、文字、聲音一起記</strong><p>你先用國旗與圖案辨認線索，再配對外語文字，最後透過語音模仿唸法；多重線索會讓新字更容易留下來。</p></div><div class="action-row"><button class="primary-btn" type="button" data-restart="language">再玩一次</button><button class="secondary-btn" type="button" data-home>挑戰另一門課</button></div></div></section>`;
+    focusMain();
+  }
+
+  function formatBusinessMoney(value) {
+    return new Intl.NumberFormat("zh-TW").format(value);
+  }
+
+  function startBusinessGame() {
+    state.business = {
+      position: -1,
+      stepsTaken: 0,
+      earnings: 0,
+      campaigns: [],
+      moving: false,
+      lastRoll: 0,
+      challenge: null,
+      pendingFinish: false,
+      startedAt: performance.now(),
+      completedAt: 0
+    };
+    renderBusinessBoard();
+  }
+
+  function renderBusinessBoard() {
+    const game = state.business;
+    if (!game) return startBusinessGame();
+    const progress = Math.min(12, game.stepsTaken);
+    const marketed = new Set(game.campaigns.map(item => item.spotIndex));
+    const challenge = game.challenge;
+    const challengeProduct = challenge ? businessSpaces[challenge.spotIndex] : null;
+    const challengeMarkup = challenge ? `<section class="ad-studio" aria-live="polite"><div class="ad-studio-head"><span>${challengeProduct.icon}</span><div><small>${challengeProduct.type}廣告案</small><h2>替「${challengeProduct.name}」選一句文案</h2></div></div><p>觀察商品特色，再把味道、聲音或使用情境轉譯成文字。哪一句最能讓顧客看見畫面？</p><div class="ad-copy-list">${challenge.order.map(choiceIndex => { const choice = challengeProduct.choices[choiceIndex]; const selected = challenge.selected === choiceIndex; return `<button class="ad-copy-choice ${selected ? "selected" : ""}" type="button" data-business-choice="${choiceIndex}" ${challenge.selected !== null ? "disabled" : ""}><span>${choice.copy}</span>${challenge.selected !== null ? `<small>${selected ? `本次收入 NT$ ${formatBusinessMoney(choice.revenue)}` : "另一種文案方向"}</small>` : `<small>選擇這則廣告文案</small>`}</button>`; }).join("")}</div>${challenge.selected !== null ? (() => { const choice = challengeProduct.choices[challenge.selected]; const tier = businessTierFeedback[choice.tier]; return `<div class="ad-income-result"><span>廣告入帳</span><strong>+ NT$ ${formatBusinessMoney(choice.revenue)}</strong><b>${tier.label}</b><p>${tier.copy}</p><button class="primary-btn" type="button" data-business-next>${game.pendingFinish ? "完成本圈並結算" : "入帳並繼續擲骰"}</button></div>`; })() : ""}</section>` : `<div class="business-instruction"><strong>${game.stepsTaken === 0 ? "公司開張！" : "上一筆廣告收入已入帳"}</strong><p>${game.stepsTaken === 0 ? "按下 1～3 點骰子開始巡迴市場；每次落地都要替一項食品挑選廣告文案。" : "繼續擲 1～3 點骰子，完成一圈即可查看安康飲食企業的總獲利。"}</p></div>`;
+
+    app.innerHTML = `<section class="experience business-theme screen">${topBar("business", progress, 12, `一圈進度 ${progress} / 12`)}<div class="experience-body business-body"><p class="kicker">ANKANG FOOD ENTERPRISE</p><h1>食品廣告創意大富翁</h1><p class="prompt">從日常觀察出發，把商品的滋味變成有畫面的故事。每次前進 1～3 格，替安康飲食企業賺進廣告收入。</p><div class="business-board" aria-label="12 格食品大富翁棋盤">${businessSpaces.map((spot, index) => { const [row, col] = businessPositions[index]; const current = game.position === index; return `<div class="business-space ${current ? "current" : ""} ${marketed.has(index) ? "marketed" : ""}" style="grid-row:${row};grid-column:${col}" aria-label="第 ${index + 1} 格，${spot.name}"><span class="space-number">${index + 1}</span><i>${spot.icon}</i><strong>${spot.short}</strong>${marketed.has(index) ? `<b class="marketed-mark">✓</b>` : ""}${current ? `<em class="business-token" aria-label="目前位置">💼</em>` : ""}</div>`; }).join("")}<div class="business-hq"><small>安康飲食企業</small><strong>NT$ ${formatBusinessMoney(game.earnings)}</strong><span>${game.moving ? `骰出 ${game.lastRoll}，前進中…` : game.lastRoll ? `上次骰出 ${game.lastRoll}` : "從企業總部出發"}</span><button class="dice-button" type="button" data-business-roll ${game.moving || challenge ? "disabled" : ""}><b>${game.lastRoll || "🎲"}</b><span>${game.moving ? "移動中" : "擲 1～3 點"}</span></button></div></div><div class="creative-route"><span>觀察商品</span><b>轉譯感受</b><em>創作文案</em><strong>分享故事</strong></div>${challengeMarkup}</div></section>`;
+  }
+
+  async function rollBusinessDice() {
+    const game = state.business;
+    if (!game || game.moving || game.challenge) return;
+    const roll = 1 + Math.floor(Math.random() * 3);
+    game.lastRoll = roll;
+    game.moving = true;
+    renderBusinessBoard();
+    for (let step = 0; step < roll; step += 1) {
+      await new Promise(resolve => window.setTimeout(resolve, 190));
+      if (state.business !== game) return;
+      game.position = (game.position + 1) % businessSpaces.length;
+      game.stepsTaken += 1;
+      renderBusinessBoard();
+    }
+    if (state.business !== game) return;
+    game.moving = false;
+    game.pendingFinish = game.stepsTaken >= businessSpaces.length;
+    const order = [0, 1, 2];
+    for (let i = order.length - 1; i > 0; i -= 1) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [order[i], order[j]] = [order[j], order[i]];
+    }
+    game.challenge = { spotIndex: game.position, order, selected: null };
+    renderBusinessBoard();
+    window.setTimeout(() => document.querySelector(".ad-studio")?.scrollIntoView({ behavior: "smooth", block: "center" }), 100);
+  }
+
+  function chooseBusinessCopy(choiceIndex) {
+    const game = state.business;
+    const challenge = game?.challenge;
+    const index = Number(choiceIndex);
+    if (!challenge || challenge.selected !== null || !Number.isInteger(index)) return;
+    const product = businessSpaces[challenge.spotIndex];
+    const choice = product.choices[index];
+    if (!choice) return;
+    challenge.selected = index;
+    game.earnings += choice.revenue;
+    game.campaigns.push({ spotIndex: challenge.spotIndex, product: product.name, icon: product.icon, copy: choice.copy, revenue: choice.revenue, tier: choice.tier });
+    renderBusinessBoard();
+    window.setTimeout(() => document.querySelector(".ad-income-result")?.scrollIntoView({ behavior: "smooth", block: "center" }), 100);
+  }
+
+  function continueBusinessGame() {
+    const game = state.business;
+    if (!game?.challenge || game.challenge.selected === null) return;
+    if (game.pendingFinish) return renderBusinessResult();
+    game.challenge = null;
+    renderBusinessBoard();
+    window.setTimeout(() => document.querySelector(".business-board")?.scrollIntoView({ behavior: "smooth", block: "center" }), 100);
+  }
+
+  function renderBusinessResult() {
+    const game = state.business;
+    if (!game) return startBusinessGame();
+    if (!game.completedAt) game.completedAt = performance.now();
+    const elapsed = Math.max(1, Math.round((game.completedAt - game.startedAt) / 1000));
+    const best = [...game.campaigns].sort((a, b) => b.revenue - a.revenue)[0];
+    const title = game.earnings >= 6000 ? "故事行銷高手" : game.earnings >= 4500 ? "創意品牌企劃" : "產品文案新秀";
+    complete("business");
+    app.innerHTML = `<section class="experience business-theme screen">${topBar("business", 12, 12, "完成一圈・企業結算")}<div class="experience-body business-result"><div class="result-badge">💼</div><p class="kicker">BUSINESS LAP COMPLETE</p><h1 class="result-title">安康飲食企業賺了<br>NT$ ${formatBusinessMoney(game.earnings)}</h1><p class="prompt result-copy">你完成食品大富翁一圈，獲得「${title}」稱號。每一次收入都來自你替商品選擇的廣告文案。</p><div class="score-grid"><div class="score-item"><span>本圈總獲利</span><strong>${formatBusinessMoney(game.earnings)}<small> 元</small></strong><div class="score-bar"><i style="width:${Math.min(100, Math.max(20, game.earnings / 75))}%"></i></div></div><div class="score-item"><span>完成廣告案</span><strong>${game.campaigns.length}<small> 件</small></strong><div class="score-bar"><i style="width:${Math.min(100, game.campaigns.length * 20)}%"></i></div></div><div class="score-item"><span>完成時間</span><strong>${elapsed}<small> 秒</small></strong><div class="score-bar"><i style="width:${Math.max(20, 150 - elapsed)}%"></i></div></div></div>${best ? `<div class="best-campaign"><span>${best.icon}</span><div><small>本圈最高收入文案｜+ NT$ ${formatBusinessMoney(best.revenue)}</small><strong>${best.product}</strong><p>「${best.copy}」</p></div></div>` : ""}<div class="campaign-ledger"><h2>安康飲食企業廣告帳本</h2>${game.campaigns.map(item => `<article><span>${item.icon}</span><div><strong>${item.product}</strong><p>${item.copy}</p></div><b>+${formatBusinessMoney(item.revenue)}</b></article>`).join("")}</div><div class="feedback"><strong>你完成了易拉展的創作歷程</strong><p>觀察商品 → 轉譯感受 → 創作文案 → 分享故事。文字不只是介紹食品，也能讓平凡的日常被看見、被記住。</p></div><div class="action-row"><button class="primary-btn" type="button" data-restart="business">再經營一圈</button><button class="secondary-btn" type="button" data-home>挑戰另一門課</button></div></div></section>`;
+    focusMain();
   }
 
   function speak(text, locale) {
@@ -1077,9 +1361,11 @@
     if (target.hasAttribute("data-drone-next")) { state.step += 1; state.locked = false; renderDrone(); return focusMain(); }
     if (target.dataset.bodyChoice) return pickBody(Number(target.dataset.bodyChoice));
     if (target.hasAttribute("data-breathe")) return startBreathing();
-    if (target.dataset.country) return chooseCountry(target.dataset.country);
-    if (target.dataset.languageChoice) return pickLanguage(Number(target.dataset.languageChoice));
-    if (target.hasAttribute("data-language-next")) { state.step += 1; state.locked = false; renderLanguageQuestion(); return focusMain(); }
+    if (target.dataset.memoryCard) return flipLanguageCard(target.dataset.memoryCard);
+    if (target.hasAttribute("data-memory-collect")) return collectLanguagePair();
+    if (target.hasAttribute("data-business-roll")) return rollBusinessDice();
+    if (target.dataset.businessChoice != null) return chooseBusinessCopy(target.dataset.businessChoice);
+    if (target.hasAttribute("data-business-next")) return continueBusinessGame();
     if (target.dataset.speak) return speak(target.dataset.speak, target.dataset.locale);
   });
 

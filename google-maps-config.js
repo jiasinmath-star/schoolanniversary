@@ -1,3 +1,3 @@
 // Google Maps JavaScript API browser key.
-// Before publishing, replace the empty value and restrict the key to the final website domain.
-window.AK_GOOGLE_MAPS_KEY = "";
+// Restrict this browser key to the final website domain and Maps JavaScript API before publishing.
+window.AK_GOOGLE_MAPS_KEY = "AIzaSyCT-n8SOKqM5JET4YokUR3is8Ui9ZLnSDE";
