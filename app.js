@@ -98,7 +98,7 @@
     drone: { title: "AI 無人機", icon: "⌁", time: "約 90 秒", desc: "從 Google 衛星空拍影像操控雙搖桿無人機，沿小地圖飛越新店地標抵達碧潭。", tags: ["Google 衛星", "雙搖桿", "AI 避障"] },
     body: { title: "身心調整", icon: "◌", time: "約 2 分鐘", desc: "回答四個身體感受問題，找出你此刻最需要的覺察方式。", tags: ["能力探索", "身體構圖", "30 秒練習"] },
     language: { title: "第二外語", icon: "あ", time: "約 2–3 分鐘", desc: "12 張日、韓、德外語牌混合挑戰，配對『你好』與『謝謝』並練習發音。", tags: ["12 張混合牌", "語音播放", "三國外語"] },
-    business: { title: "創意文學與實作", icon: "✎", time: "約 2–3 分鐘", desc: "經營安康飲食企業，每次前進 1～3 格，用有畫面的食品廣告文案賺取收入。", tags: ["1～3 格骰子", "廣告文案", "企業獲利"] }
+    business: { title: "創意文學與實作", icon: "✎", time: "約 2–3 分鐘", desc: "經營安康飲食企業，逐格跳過 16 格食品棋盤，用有畫面的廣告文案賺取收入。", tags: ["16 格棋盤", "1～3 格骰子", "廣告文案"] }
   };
 
   const droneStages = [
@@ -238,10 +238,30 @@
       { copy: "酥脆花生配上微辣香料，越嚼越香。", revenue: 950, tier: "benefit" },
       { copy: "第一口是花生香，第二口辣意追上來，像一場越跑越熱鬧的接力賽。", revenue: 1540, tier: "story" },
       { copy: "辣辣的花生零食。", revenue: 400, tier: "basic" }
+    ] },
+    { name: "蘋果清甜果汁", short: "蘋果果汁", icon: "🍎", type: "飲料", choices: [
+      { copy: "清甜果香，冰過更好喝。", revenue: 900, tier: "benefit" },
+      { copy: "紅蘋果在杯中醒來，一口喝下，像走進剛下過雨的果園。", revenue: 1500, tier: "story" },
+      { copy: "蘋果口味的果汁。", revenue: 410, tier: "basic" }
+    ] },
+    { name: "牛奶小圓餅", short: "牛奶小圓餅", icon: "🥛", type: "餅乾", choices: [
+      { copy: "小巧酥鬆，帶著溫柔奶香，課間分享剛剛好。", revenue: 920, tier: "benefit" },
+      { copy: "一顆顆小圓餅像口袋裡的月亮，咬下去，奶香替忙碌按了暫停。", revenue: 1520, tier: "story" },
+      { copy: "有牛奶味的小餅乾。", revenue: 400, tier: "basic" }
+    ] },
+    { name: "抹茶威化餅", short: "抹茶威化餅", icon: "🍵", type: "餅乾", choices: [
+      { copy: "多層酥脆威化，抹茶微苦回甘。", revenue: 940, tier: "benefit" },
+      { copy: "薄脆一層層打開，抹茶香像綠色的風，從午後課桌輕輕吹過。", revenue: 1550, tier: "story" },
+      { copy: "抹茶口味的威化餅。", revenue: 420, tier: "basic" }
+    ] },
+    { name: "陽光芒果果乾", short: "芒果果乾", icon: "🥭", type: "零食", choices: [
+      { copy: "果肉厚實、酸甜有嚼勁，隨身補充水果香。", revenue: 960, tier: "benefit" },
+      { copy: "把盛夏的芒果切成金黃書籤，每咬一口，都翻回陽光最甜的那一頁。", revenue: 1580, tier: "story" },
+      { copy: "甜甜的芒果果乾。", revenue: 430, tier: "basic" }
     ] }
   ];
 
-  const businessPositions = [[1,1],[1,2],[1,3],[1,4],[2,4],[3,4],[4,4],[4,3],[4,2],[4,1],[3,1],[2,1]];
+  const businessPositions = [[1,1],[1,2],[1,3],[1,4],[1,5],[2,5],[3,5],[4,5],[5,5],[5,4],[5,3],[5,2],[5,1],[4,1],[3,1],[2,1]];
   const businessTierFeedback = {
     story: { label: "畫面故事文案", copy: "你把味道、聲音或情境寫成一幅畫，讓顧客不只看見商品，也想像自己正在享用它。" },
     benefit: { label: "產品特色文案", copy: "你清楚說出商品特色與適合的時機，資訊完整，也能吸引有需要的顧客。" },
@@ -1258,13 +1278,45 @@
   function renderBusinessBoard() {
     const game = state.business;
     if (!game) return startBusinessGame();
-    const progress = Math.min(12, game.stepsTaken);
+    const totalSpaces = businessSpaces.length;
+    const progress = Math.min(totalSpaces, game.stepsTaken);
     const marketed = new Set(game.campaigns.map(item => item.spotIndex));
     const challenge = game.challenge;
     const challengeProduct = challenge ? businessSpaces[challenge.spotIndex] : null;
-    const challengeMarkup = challenge ? `<section class="ad-studio" aria-live="polite"><div class="ad-studio-head"><span>${challengeProduct.icon}</span><div><small>${challengeProduct.type}廣告案</small><h2>替「${challengeProduct.name}」選一句文案</h2></div></div><p>觀察商品特色，再把味道、聲音或使用情境轉譯成文字。哪一句最能讓顧客看見畫面？</p><div class="ad-copy-list">${challenge.order.map(choiceIndex => { const choice = challengeProduct.choices[choiceIndex]; const selected = challenge.selected === choiceIndex; return `<button class="ad-copy-choice ${selected ? "selected" : ""}" type="button" data-business-choice="${choiceIndex}" ${challenge.selected !== null ? "disabled" : ""}><span>${choice.copy}</span>${challenge.selected !== null ? `<small>${selected ? `本次收入 NT$ ${formatBusinessMoney(choice.revenue)}` : "另一種文案方向"}</small>` : `<small>選擇這則廣告文案</small>`}</button>`; }).join("")}</div>${challenge.selected !== null ? (() => { const choice = challengeProduct.choices[challenge.selected]; const tier = businessTierFeedback[choice.tier]; return `<div class="ad-income-result"><span>廣告入帳</span><strong>+ NT$ ${formatBusinessMoney(choice.revenue)}</strong><b>${tier.label}</b><p>${tier.copy}</p><button class="primary-btn" type="button" data-business-next>${game.pendingFinish ? "完成本圈並結算" : "入帳並繼續擲骰"}</button></div>`; })() : ""}</section>` : `<div class="business-instruction"><strong>${game.stepsTaken === 0 ? "公司開張！" : "上一筆廣告收入已入帳"}</strong><p>${game.stepsTaken === 0 ? "按下 1～3 點骰子開始巡迴市場；每次落地都要替一項食品挑選廣告文案。" : "繼續擲 1～3 點骰子，完成一圈即可查看安康飲食企業的總獲利。"}</p></div>`;
+    const challengeMarkup = challenge ? `<section class="ad-studio" aria-live="polite"><div class="ad-studio-head"><span>${challengeProduct.icon}</span><div><small>${challengeProduct.type}廣告案</small><h2>替「${challengeProduct.name}」選一句文案</h2></div></div><p>觀察商品特色，再把味道、聲音或使用情境轉譯成文字。哪一句最能讓顧客看見畫面？</p><div class="ad-copy-list">${challenge.order.map(choiceIndex => { const choice = challengeProduct.choices[choiceIndex]; const selected = challenge.selected === choiceIndex; return `<button class="ad-copy-choice ${selected ? "selected" : ""}" type="button" data-business-choice="${choiceIndex}" ${challenge.selected !== null ? "disabled" : ""}><span>${choice.copy}</span>${challenge.selected !== null ? `<small>${selected ? `本次收入 NT$ ${formatBusinessMoney(choice.revenue)}` : "另一種文案方向"}</small>` : `<small>選擇這則廣告文案</small>`}</button>`; }).join("")}</div>${challenge.selected !== null ? (() => { const choice = challengeProduct.choices[challenge.selected]; const tier = businessTierFeedback[choice.tier]; return `<div class="ad-income-result"><span>廣告入帳</span><strong>+ NT$ ${formatBusinessMoney(choice.revenue)}</strong><b>${tier.label}</b><p>${tier.copy}</p><button class="primary-btn" type="button" data-business-next>${game.pendingFinish ? "完成本圈並結算" : "入帳並繼續擲骰"}</button></div>`; })() : ""}</section>` : game.moving ? `<div class="business-instruction moving-note"><strong>棋子正在逐格前進</strong><p>請先看公事包跳過每一格；抵達商品後，才會前往廣告文案選擇區。</p></div>` : `<div class="business-instruction"><strong>${game.stepsTaken === 0 ? "公司開張！" : "上一筆廣告收入已入帳"}</strong><p>${game.stepsTaken === 0 ? "按下 1～3 點骰子開始巡迴市場；每次落地都要替一項食品挑選廣告文案。" : "繼續擲 1～3 點骰子，完成一圈即可查看安康飲食企業的總獲利。"}</p></div>`;
 
-    app.innerHTML = `<section class="experience business-theme screen">${topBar("business", progress, 12, `一圈進度 ${progress} / 12`)}<div class="experience-body business-body"><p class="kicker">ANKANG FOOD ENTERPRISE</p><h1>食品廣告創意大富翁</h1><p class="prompt">從日常觀察出發，把商品的滋味變成有畫面的故事。每次前進 1～3 格，替安康飲食企業賺進廣告收入。</p><div class="business-board" aria-label="12 格食品大富翁棋盤">${businessSpaces.map((spot, index) => { const [row, col] = businessPositions[index]; const current = game.position === index; return `<div class="business-space ${current ? "current" : ""} ${marketed.has(index) ? "marketed" : ""}" style="grid-row:${row};grid-column:${col}" aria-label="第 ${index + 1} 格，${spot.name}"><span class="space-number">${index + 1}</span><i>${spot.icon}</i><strong>${spot.short}</strong>${marketed.has(index) ? `<b class="marketed-mark">✓</b>` : ""}${current ? `<em class="business-token" aria-label="目前位置">💼</em>` : ""}</div>`; }).join("")}<div class="business-hq"><small>安康飲食企業</small><strong>NT$ ${formatBusinessMoney(game.earnings)}</strong><span>${game.moving ? `骰出 ${game.lastRoll}，前進中…` : game.lastRoll ? `上次骰出 ${game.lastRoll}` : "從企業總部出發"}</span><button class="dice-button" type="button" data-business-roll ${game.moving || challenge ? "disabled" : ""}><b>${game.lastRoll || "🎲"}</b><span>${game.moving ? "移動中" : "擲 1～3 點"}</span></button></div></div><div class="creative-route"><span>觀察商品</span><b>轉譯感受</b><em>創作文案</em><strong>分享故事</strong></div>${challengeMarkup}</div></section>`;
+    app.innerHTML = `<section class="experience business-theme screen business-live">${topBar("business", progress, totalSpaces, `一圈進度 ${progress} / ${totalSpaces}`)}<div class="experience-body business-body"><p class="kicker">ANKANG FOOD ENTERPRISE</p><h1>食品廣告創意大富翁</h1><p class="prompt">從日常觀察出發，把商品的滋味變成有畫面的故事。每次前進 1～3 格，替安康飲食企業賺進廣告收入。</p><div class="business-board" aria-label="${totalSpaces} 格食品大富翁棋盤">${businessSpaces.map((spot, index) => { const [row, col] = businessPositions[index]; const current = game.position === index; return `<div class="business-space ${current ? "current" : ""} ${current && game.moving ? "moving" : ""} ${marketed.has(index) ? "marketed" : ""}" style="grid-row:${row};grid-column:${col}" aria-label="第 ${index + 1} 格，${spot.name}"><span class="space-number">${index + 1}</span><i>${spot.icon}</i><strong>${spot.short}</strong>${marketed.has(index) ? `<b class="marketed-mark">✓</b>` : ""}${current ? `<em class="business-token" aria-label="目前位置">💼</em>` : ""}</div>`; }).join("")}<div class="business-hq"><small>安康飲食企業</small><strong>NT$ ${formatBusinessMoney(game.earnings)}</strong><span>${game.moving ? `骰出 ${game.lastRoll}，逐格前進中…` : game.lastRoll ? `上次骰出 ${game.lastRoll}` : "從企業總部出發"}</span><button class="dice-button" type="button" data-business-roll ${game.moving || challenge ? "disabled" : ""}><b>${game.lastRoll || "🎲"}</b><span>${game.moving ? "看棋子跳動" : "擲 1～3 點"}</span></button></div></div><div class="creative-route"><span>觀察商品</span><b>轉譯感受</b><em>創作文案</em><strong>分享故事</strong></div>${challengeMarkup}</div></section>`;
+  }
+
+  function updateBusinessMovementFrame(game) {
+    const spaces = [...document.querySelectorAll(".business-space")];
+    spaces.forEach(space => {
+      space.classList.remove("current", "moving");
+      space.querySelector(".business-token")?.remove();
+    });
+    const current = spaces[game.position];
+    if (current) {
+      current.classList.add("current", "moving");
+      const token = document.createElement("em");
+      token.className = "business-token";
+      token.setAttribute("aria-label", "目前位置");
+      token.textContent = "💼";
+      current.append(token);
+    }
+    const progress = Math.min(businessSpaces.length, game.stepsTaken);
+    const label = document.querySelector(".step-label");
+    if (label) label.textContent = `一圈進度 ${progress} / ${businessSpaces.length}`;
+    document.querySelector(".progress")?.style.setProperty("--progress", `${Math.round(progress / businessSpaces.length * 100)}%`);
+    const statusLine = document.querySelector(".business-hq > span");
+    if (statusLine) statusLine.textContent = `骰出 ${game.lastRoll}，逐格前進中…`;
+    const dice = document.querySelector("[data-business-roll]");
+    if (dice) {
+      dice.disabled = true;
+      const value = dice.querySelector("b");
+      const text = dice.querySelector("span");
+      if (value) value.textContent = String(game.lastRoll);
+      if (text) text.textContent = "看棋子跳動";
+    }
   }
 
   async function rollBusinessDice() {
@@ -1273,13 +1325,31 @@
     const roll = 1 + Math.floor(Math.random() * 3);
     game.lastRoll = roll;
     game.moving = true;
-    renderBusinessBoard();
+    const dice = document.querySelector("[data-business-roll]");
+    if (dice) {
+      dice.disabled = true;
+      const value = dice.querySelector("b");
+      const text = dice.querySelector("span");
+      if (value) value.textContent = String(roll);
+      if (text) text.textContent = "準備跳動";
+    }
+    const statusLine = document.querySelector(".business-hq > span");
+    if (statusLine) statusLine.textContent = `骰出 ${roll}，準備逐格前進`;
+    const movingNote = document.querySelector(".business-instruction");
+    if (movingNote) {
+      const heading = movingNote.querySelector("strong");
+      const copy = movingNote.querySelector("p");
+      movingNote.classList.add("moving-note");
+      if (heading) heading.textContent = "棋子正在逐格前進";
+      if (copy) copy.textContent = "請先看公事包跳過每一格；抵達商品後，才會前往廣告文案選擇區。";
+    }
+    await new Promise(resolve => window.setTimeout(resolve, 300));
     for (let step = 0; step < roll; step += 1) {
-      await new Promise(resolve => window.setTimeout(resolve, 190));
       if (state.business !== game) return;
       game.position = (game.position + 1) % businessSpaces.length;
       game.stepsTaken += 1;
-      renderBusinessBoard();
+      updateBusinessMovementFrame(game);
+      await new Promise(resolve => window.setTimeout(resolve, 620));
     }
     if (state.business !== game) return;
     game.moving = false;
@@ -1291,7 +1361,7 @@
     }
     game.challenge = { spotIndex: game.position, order, selected: null };
     renderBusinessBoard();
-    window.setTimeout(() => document.querySelector(".ad-studio")?.scrollIntoView({ behavior: "smooth", block: "center" }), 100);
+    window.setTimeout(() => document.querySelector(".ad-studio")?.scrollIntoView({ behavior: "smooth", block: "center" }), 1200);
   }
 
   function chooseBusinessCopy(choiceIndex) {
@@ -1326,7 +1396,8 @@
     const best = [...game.campaigns].sort((a, b) => b.revenue - a.revenue)[0];
     const title = game.earnings >= 6000 ? "故事行銷高手" : game.earnings >= 4500 ? "創意品牌企劃" : "產品文案新秀";
     complete("business");
-    app.innerHTML = `<section class="experience business-theme screen">${topBar("business", 12, 12, "完成一圈・企業結算")}<div class="experience-body business-result"><div class="result-badge">💼</div><p class="kicker">BUSINESS LAP COMPLETE</p><h1 class="result-title">安康飲食企業賺了<br>NT$ ${formatBusinessMoney(game.earnings)}</h1><p class="prompt result-copy">你完成食品大富翁一圈，獲得「${title}」稱號。每一次收入都來自你替商品選擇的廣告文案。</p><div class="score-grid"><div class="score-item"><span>本圈總獲利</span><strong>${formatBusinessMoney(game.earnings)}<small> 元</small></strong><div class="score-bar"><i style="width:${Math.min(100, Math.max(20, game.earnings / 75))}%"></i></div></div><div class="score-item"><span>完成廣告案</span><strong>${game.campaigns.length}<small> 件</small></strong><div class="score-bar"><i style="width:${Math.min(100, game.campaigns.length * 20)}%"></i></div></div><div class="score-item"><span>完成時間</span><strong>${elapsed}<small> 秒</small></strong><div class="score-bar"><i style="width:${Math.max(20, 150 - elapsed)}%"></i></div></div></div>${best ? `<div class="best-campaign"><span>${best.icon}</span><div><small>本圈最高收入文案｜+ NT$ ${formatBusinessMoney(best.revenue)}</small><strong>${best.product}</strong><p>「${best.copy}」</p></div></div>` : ""}<div class="campaign-ledger"><h2>安康飲食企業廣告帳本</h2>${game.campaigns.map(item => `<article><span>${item.icon}</span><div><strong>${item.product}</strong><p>${item.copy}</p></div><b>+${formatBusinessMoney(item.revenue)}</b></article>`).join("")}</div><div class="feedback"><strong>你完成了易拉展的創作歷程</strong><p>觀察商品 → 轉譯感受 → 創作文案 → 分享故事。文字不只是介紹食品，也能讓平凡的日常被看見、被記住。</p></div><div class="action-row"><button class="primary-btn" type="button" data-restart="business">再經營一圈</button><button class="secondary-btn" type="button" data-home>挑戰另一門課</button></div></div></section>`;
+    const totalSpaces = businessSpaces.length;
+    app.innerHTML = `<section class="experience business-theme screen">${topBar("business", totalSpaces, totalSpaces, "完成一圈・企業結算")}<div class="experience-body business-result"><div class="result-badge">💼</div><p class="kicker">BUSINESS LAP COMPLETE</p><h1 class="result-title">安康飲食企業賺了<br>NT$ ${formatBusinessMoney(game.earnings)}</h1><p class="prompt result-copy">你完成食品大富翁一圈，獲得「${title}」稱號。每一次收入都來自你替商品選擇的廣告文案。</p><div class="score-grid"><div class="score-item"><span>本圈總獲利</span><strong>${formatBusinessMoney(game.earnings)}<small> 元</small></strong><div class="score-bar"><i style="width:${Math.min(100, Math.max(20, game.earnings / 75))}%"></i></div></div><div class="score-item"><span>完成廣告案</span><strong>${game.campaigns.length}<small> 件</small></strong><div class="score-bar"><i style="width:${Math.min(100, game.campaigns.length * 20)}%"></i></div></div><div class="score-item"><span>完成時間</span><strong>${elapsed}<small> 秒</small></strong><div class="score-bar"><i style="width:${Math.max(20, 150 - elapsed)}%"></i></div></div></div>${best ? `<div class="best-campaign"><span>${best.icon}</span><div><small>本圈最高收入文案｜+ NT$ ${formatBusinessMoney(best.revenue)}</small><strong>${best.product}</strong><p>「${best.copy}」</p></div></div>` : ""}<div class="campaign-ledger"><h2>安康飲食企業廣告帳本</h2>${game.campaigns.map(item => `<article><span>${item.icon}</span><div><strong>${item.product}</strong><p>${item.copy}</p></div><b>+${formatBusinessMoney(item.revenue)}</b></article>`).join("")}</div><div class="feedback"><strong>你完成了易拉展的創作歷程</strong><p>觀察商品 → 轉譯感受 → 創作文案 → 分享故事。文字不只是介紹食品，也能讓平凡的日常被看見、被記住。</p></div><div class="action-row"><button class="primary-btn" type="button" data-restart="business">再經營一圈</button><button class="secondary-btn" type="button" data-home>挑戰另一門課</button></div></div></section>`;
     focusMain();
   }
 

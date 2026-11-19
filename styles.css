@@ -197,6 +197,7 @@ button:focus-visible, a:focus-visible { outline: 3px solid #f7b538; outline-offs
 .experience.body-theme { --theme: #17b7bc; --theme-deep: #d76691; background: radial-gradient(circle at 90% 0, rgba(227,103,146,.2), transparent 34%), linear-gradient(155deg, #fff, #fff6fa); }
 .experience.language-theme { --theme: #ed9f2d; --theme-deep: #286cc0; background: radial-gradient(circle at 0 0, rgba(255,202,61,.23), transparent 34%), linear-gradient(155deg, #fff, #fffaf0); }
 .experience.business-theme { --theme: #ec9e28; --theme-deep: #176544; background: radial-gradient(circle at 90% 0, rgba(255,191,54,.24), transparent 32%), radial-gradient(circle at 0 55%, rgba(61,167,115,.16), transparent 36%), linear-gradient(155deg, #fff, #f7fff2); }
+.screen.business-live { animation: none; }
 
 .experience-top { padding: 22px clamp(20px, 4vw, 42px) 0; }
 .top-line { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
@@ -635,8 +636,8 @@ button:focus-visible, a:focus-visible { outline: 3px solid #f7b538; outline-offs
 .business-body { width: min(840px, 100%); }
 .business-board {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  grid-template-rows: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-rows: repeat(5, minmax(0, 1fr));
   gap: 7px;
   aspect-ratio: 1;
   margin-top: 26px;
@@ -673,6 +674,12 @@ button:focus-visible, a:focus-visible { outline: 3px solid #f7b538; outline-offs
   box-shadow: 0 0 0 4px rgba(255,183,45,.32), 0 9px 18px rgba(7,39,29,.25);
   transform: scale(1.045);
 }
+.business-space.current.moving { animation: space-step-hop .62s cubic-bezier(.2,.8,.25,1) both; }
+@keyframes space-step-hop {
+  0% { transform: translateY(-13px) scale(.8); filter: brightness(1.25); box-shadow: 0 0 0 2px rgba(255,183,45,.2); }
+  52% { transform: translateY(-7px) scale(1.13); box-shadow: 0 0 0 7px rgba(255,183,45,.48), 0 12px 22px rgba(7,39,29,.28); }
+  100% { transform: translateY(0) scale(1.045); filter: brightness(1); box-shadow: 0 0 0 4px rgba(255,183,45,.32), 0 9px 18px rgba(7,39,29,.25); }
+}
 .business-space.marketed::after {
   content: "";
   position: absolute;
@@ -689,15 +696,30 @@ button:focus-visible, a:focus-visible { outline: 3px solid #f7b538; outline-offs
   position: absolute;
   right: 5px;
   top: 3px;
-  font-size: 24px;
+  z-index: 4;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  font-size: 23px;
   font-style: normal;
+  background: #ffcf58;
+  box-shadow: 0 5px 12px rgba(66,42,0,.32);
   filter: drop-shadow(0 4px 4px rgba(0,0,0,.25));
   animation: token-hop .55s ease infinite alternate;
 }
 @keyframes token-hop { to { transform: translateY(-5px) rotate(4deg); } }
+.business-space.moving .business-token { animation: token-step .62s cubic-bezier(.2,.8,.25,1) both; }
+@keyframes token-step {
+  0% { transform: translate(-14px,-18px) scale(.7) rotate(-12deg); opacity: .4; }
+  60% { transform: translate(0,-9px) scale(1.18) rotate(7deg); opacity: 1; }
+  100% { transform: translate(0,0) scale(1) rotate(0); opacity: 1; }
+}
 .business-hq {
-  grid-row: 2 / span 2;
-  grid-column: 2 / span 2;
+  grid-row: 2 / span 3;
+  grid-column: 2 / span 3;
   display: grid;
   place-items: center;
   align-content: center;
@@ -899,7 +921,7 @@ button:focus-visible, a:focus-visible { outline: 3px solid #f7b538; outline-offs
   .space-number { top: 3px; left: 4px; font-size: 8px; }
   .business-space i { font-size: 23px; }
   .business-space > strong { font-size: 9px; line-height: 1.14; }
-  .business-token { right: 2px; top: 1px; font-size: 17px; }
+  .business-token { right: 1px; top: 1px; width: 27px; height: 27px; font-size: 18px; }
   .marketed-mark { right: 3px; bottom: 2px; font-size: 11px; }
   .business-hq { gap: 4px; padding: 5px; border-radius: 16px; }
   .business-hq small { font-size: 9px; letter-spacing: 0; }
