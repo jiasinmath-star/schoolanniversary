@@ -1,0 +1,4 @@
+CREATE TABLE IF NOT EXISTS experience_counts (
+  game TEXT PRIMARY KEY NOT NULL,
+  count INTEGER NOT NULL DEFAULT 0
+);

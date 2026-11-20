@@ -6,7 +6,8 @@
   const toast = document.querySelector("#toast");
   const storageKey = "ankang-ai-experience-v1";
   const countedStorageKey = "ankang-ai-global-counted-v1";
-  const countEndpoint = "/api/experience-counts";
+  const configuredCountApi = String(window.ANKANG_COUNTER_API_URL || "").trim().replace(/\/+$/, "");
+  const countEndpoint = configuredCountApi ? `${configuredCountApi}/api/experience-counts` : "";
   const experienceCounts = { drone: null, body: null, language: null, business: null };
   const pendingCountGames = new Set();
   let state = { game: null, step: 0, answers: [], scores: {}, locale: null, locked: false };
@@ -297,6 +298,10 @@
   }
 
   async function fetchExperienceCounts() {
+    if (!countEndpoint) {
+      document.querySelectorAll("[data-experience-count]").forEach(element => { element.textContent = "全體人次尚未啟用"; });
+      return;
+    }
     try {
       const response = await fetch(countEndpoint, { headers: { Accept: "application/json" }, cache: "no-store" });
       if (!response.ok) throw new Error(`count fetch failed: ${response.status}`);
@@ -313,7 +318,7 @@
   }
 
   async function recordGlobalExperience(game) {
-    if (!games[game] || pendingCountGames.has(game)) return;
+    if (!countEndpoint || !games[game] || pendingCountGames.has(game)) return;
     const counted = readCountedGames();
     if (counted[game]) return;
     pendingCountGames.add(game);

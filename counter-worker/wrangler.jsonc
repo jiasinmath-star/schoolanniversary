@@ -1,0 +1,17 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "ankang-ai-experience-counter",
+  "main": "src/index.js",
+  "compatibility_date": "2026-11-20",
+  "vars": {
+    "ALLOWED_ORIGINS": "https://jiasinmath-star.github.io"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "ankang-ai-experience-counts",
+      "database_id": "REPLACE_WITH_D1_DATABASE_ID",
+      "migrations_dir": "migrations"
+    }
+  ]
+}
