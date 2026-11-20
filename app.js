@@ -12,6 +12,7 @@
   const pendingCountGames = new Set();
   let state = { game: null, step: 0, answers: [], scores: {}, locale: null, locked: false };
   let breathTimer = null;
+  let activePronunciationAudio = null;
   let flightFrame = null;
   let flightLastTime = 0;
   let flightMap = null;
@@ -170,17 +171,26 @@
 
   const languageData = {
     ja: { name: "日本", language: "日語", flag: "🇯🇵", locale: "ja-JP", hello: "こんにちは", roman: "Konnichiwa", phrases: {
-      hello: { translation: "你好", foreign: "こんにちは", roman: "Konnichiwa", phonetic: "空你七哇", icon: "👋", note: "白天見面時常用的招呼語。" },
-      thanks: { translation: "謝謝", foreign: "ありがとう", roman: "Arigatō", phonetic: "阿里嘎多", icon: "🙏", note: "向熟悉的人表達感謝；更禮貌可說「ありがとうございます」。" }
+      hello: { translation: "你好", foreign: "こんにちは", roman: "Konnichiwa", phonetic: "空你七哇", icon: "👋", note: "白天見面時常用的招呼語。", audio: "./assets/audio/ja-hello.wav" },
+      thanks: { translation: "謝謝", foreign: "ありがとう", roman: "Arigatō", phonetic: "阿里嘎多", icon: "🙏", note: "向熟悉的人表達感謝；更禮貌可說「ありがとうございます」。", audio: "./assets/audio/ja-thanks.wav" }
     } },
     ko: { name: "韓國", language: "韓語", flag: "🇰🇷", locale: "ko-KR", hello: "안녕하세요", roman: "Annyeonghaseyo", phrases: {
-      hello: { translation: "你好", foreign: "안녕하세요", roman: "Annyeonghaseyo", phonetic: "安妞哈誰唷", icon: "👋", note: "日常最常用、也很有禮貌的問候語。" },
-      thanks: { translation: "謝謝", foreign: "감사합니다", roman: "Gamsahamnida", phonetic: "康撒哈密達", icon: "🙏", note: "正式且有禮貌的感謝說法。" }
+      hello: { translation: "你好", foreign: "안녕하세요", roman: "Annyeonghaseyo", phonetic: "安妞哈誰唷", icon: "👋", note: "日常最常用、也很有禮貌的問候語。", audio: "./assets/audio/ko-hello.wav" },
+      thanks: { translation: "謝謝", foreign: "감사합니다", roman: "Gamsahamnida", phonetic: "康撒哈密達", icon: "🙏", note: "正式且有禮貌的感謝說法。", audio: "./assets/audio/ko-thanks.wav" }
     } },
     de: { name: "德國", language: "德語", flag: "🇩🇪", locale: "de-DE", hello: "Hallo!", roman: "Hallo", phrases: {
-      hello: { translation: "你好", foreign: "Hallo!", roman: "Hallo", phonetic: "哈囉", icon: "👋", note: "輕鬆、常見的日常招呼語。" },
-      thanks: { translation: "謝謝", foreign: "Danke!", roman: "Danke", phonetic: "丹可", icon: "🙏", note: "最常用的感謝說法。" }
+      hello: { translation: "你好", foreign: "Hallo!", roman: "Hallo", phonetic: "哈囉", icon: "👋", note: "輕鬆、常見的日常招呼語。", audio: "./assets/audio/de-hello.wav" },
+      thanks: { translation: "謝謝", foreign: "Danke!", roman: "Danke", phonetic: "丹可", icon: "🙏", note: "最常用的感謝說法。", audio: "./assets/audio/de-thanks.wav" }
     } }
+  };
+
+  const pronunciationAudio = {
+    "ja-JP|こんにちは": "./assets/audio/ja-hello.wav",
+    "ja-JP|ありがとう": "./assets/audio/ja-thanks.wav",
+    "ko-KR|안녕하세요": "./assets/audio/ko-hello.wav",
+    "ko-KR|감사합니다": "./assets/audio/ko-thanks.wav",
+    "de-DE|Hallo!": "./assets/audio/de-hello.wav",
+    "de-DE|Danke!": "./assets/audio/de-thanks.wav"
   };
 
   const businessSpaces = [
@@ -1272,8 +1282,8 @@
       const d = languageData[first.locale];
       game.lesson = { locale: first.locale, phraseKey: first.phraseKey, pairKey: first.pairKey, cardIds: [firstId, secondId] };
       if (statusLine) statusLine.textContent = "配對成功！準備進入發音教學";
-      speak(d.phrases[first.phraseKey].foreign, d.locale);
       window.setTimeout(renderLanguageMemory, 520);
+      speak(d.phrases[first.phraseKey].foreign, d.locale);
       return;
     }
     if (statusLine) statusLine.textContent = "這兩張不同，記住位置再試一次";
@@ -1468,15 +1478,50 @@
     focusMain();
   }
 
-  function speak(text, locale) {
-    if (!("speechSynthesis" in window)) return showToast("這台裝置不支援語音播放");
-    window.speechSynthesis.cancel();
-    const utter = new SpeechSynthesisUtterance(text);
-    utter.lang = locale;
-    utter.rate = .84;
-    const voice = window.speechSynthesis.getVoices().find(v => v.lang.toLowerCase().startsWith(locale.slice(0, 2).toLowerCase()));
-    if (voice) utter.voice = voice;
-    window.speechSynthesis.speak(utter);
+  function speakWithDeviceVoice(text, locale) {
+    if (!("speechSynthesis" in window) || !("SpeechSynthesisUtterance" in window)) return false;
+    try {
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = locale;
+      utter.rate = .84;
+      const voice = window.speechSynthesis.getVoices().find(v => v.lang.toLowerCase().startsWith(locale.slice(0, 2).toLowerCase()));
+      if (voice) utter.voice = voice;
+      window.speechSynthesis.speak(utter);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  async function speak(text, locale) {
+    if (activePronunciationAudio) {
+      activePronunciationAudio.pause();
+      activePronunciationAudio.currentTime = 0;
+      activePronunciationAudio = null;
+    }
+
+    let usedFallback = false;
+    const fallback = () => {
+      if (usedFallback) return;
+      usedFallback = true;
+      if (speakWithDeviceVoice(text, locale)) showToast("使用裝置語音播放");
+      else showToast("發音載入失敗，請確認媒體音量後再試一次");
+    };
+
+    const audioUrl = pronunciationAudio[`${locale}|${text}`];
+    if (!audioUrl || !("Audio" in window)) return fallback();
+    const audio = new Audio(audioUrl);
+    activePronunciationAudio = audio;
+    audio.preload = "auto";
+    audio.onended = () => { if (activePronunciationAudio === audio) activePronunciationAudio = null; };
+    audio.onerror = fallback;
+    try {
+      await audio.play();
+      showToast("正在播放發音");
+    } catch {
+      fallback();
+    }
   }
 
   async function copyLink(game) {
